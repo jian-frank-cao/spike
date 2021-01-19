@@ -4,7 +4,7 @@ Created on Mon Jan 18 13:49:11 2021
 
 @author: Jian Cao
 
-Download and upload files from Box
+Download and upload files from SFTP
 """
 
 ## Set environment ------------------------------------------------------------
@@ -12,14 +12,14 @@ import os
 from ftplib import FTP_TLS, error_perm
 
 ## Define class ---------------------------------------------------------------
-class BoxFTP:
-    """Object that connects Box FTP
+class ConnectSFTP:
+    """Object that connects SFTP
     Functions:
-        .ListFile(box_path, pattern)
-        .DownloadFile(box_path, download_path, filename)
-        .UploadFile(box_path, source_path, filename)
+        .ListFile(sftp_path, pattern)
+        .DownloadFile(sftp_path, download_path, filename)
+        .UploadFile(sftp_path, source_path, filename)
     Parameters:     
-       box_path (str): path of the Box folder
+       sftp_path (str): path of the SFTP folder
        pattern (str): string used in filtering files
        download_path (str): path of the download folder
        source_path (str): path of the source folder
@@ -28,50 +28,50 @@ class BoxFTP:
        int: sum of x and y
     """
     
-    def __init__(self, box_host, box_username, box_passwd):
-        self.ftp = FTP_TLS(box_host)
+    def __init__(self, sftp_host, sftp_username, sftp_passwd):
+        self.ftp = FTP_TLS(sftp_host)
         self.ftp.debugging = 2
-        self.ftp.login(box_username, box_passwd)
-        print('Connected to Box FTP.')
+        self.ftp.login(sftp_username, sftp_passwd)
+        print('Connected to SFTP.')
 
 
-    def _check_path(self, path, is_box_path):
+    def _check_path(self, path, is_sftp_path):
         if path[-1] != '/':
             path = path + '/'
-        if not is_box_path:
+        if not is_sftp_path:
             return(path)
         if path[0] != '/':
             path = '/' + path
         return(path)
 
 
-    def ListFiles(self, box_path, pattern):
-        """List files in box_path
+    def ListFiles(self, sftp_path, pattern):
+        """List files in sftp_path
         Parameters:     
-           box_path (str): path of the Box folder
+           sftp_path (str): path of the SFTP folder
            pattern (str): string used in filtering files 
         Returns:     
            list(str): list of file names
         """ 
-        box_path = self._check_path(box_path, True)
-        self.ftp.cwd(box_path)
+        sftp_path = self._check_path(sftp_path, True)
+        self.ftp.cwd(sftp_path)
         file_list = self.ftp.nlst()
         file_list = [x for x in file_list if pattern in x]
         return(file_list)
 
 
-    def DownloadFile(self, box_path, download_path, filename):
-        """Download file from box to local disk
+    def DownloadFile(self, sftp_path, download_path, filename):
+        """Download file from sftp to local disk
         Parameters:     
-           box_path (str): path of the Box folder
+           sftp_path (str): path of the SFTP folder
            download_path (str): path of the download folder
            filename (str): name of the target file   
         Returns:     
            None
         """ 
-        box_path = self._check_path(box_path, True)
+        sftp_path = self._check_path(sftp_path, True)
         download_path = self._check_path(download_path, False)
-        self.ftp.cwd(box_path)
+        self.ftp.cwd(sftp_path)
         retry = True
         while retry:
             retry = False
@@ -88,18 +88,18 @@ class BoxFTP:
         print(download_path + filename + ' is downloaded.')
 
 
-    def UploadFile(self, box_path, source_path, filename):
-        """Upload file from local disk to Box
+    def UploadFile(self, sftp_path, source_path, filename):
+        """Upload file from local disk to SFTP
         Parameters:     
-           box_path (str): path of the Box folder
+           sftp_path (str): path of the SFTP folder
            source_path (str): path of the source folder
            filename (str): name of the target file    
         Returns:     
            None
         """ 
-        box_path = self._check_path(box_path, True)
+        sftp_path = self._check_path(sftp_path, True)
         source_path = self._check_path(source_path, False)
-        self.ftp.cwd(box_path)
+        self.ftp.cwd(sftp_path)
         retry = True
         while retry:
             retry = False
@@ -113,18 +113,18 @@ class BoxFTP:
                 else:
                     retry = True
                     continue
-        print(box_path + filename + ' is uploaded.')
+        print(sftp_path + filename + ' is uploaded.')
 
         
 ## main -----------------------------------------------------------------------
 if __name__ == "__main__":
-    def get_box_path():
-        box_path = input('Enter Box path: ')
-        if box_path[0] != '/':
-            box_path = '/' + box_path
-        if box_path[-1] != '/':
-            box_path = box_path + '/'
-        return(box_path)
+    def get_sftp_path():
+        sftp_path = input('Enter SFTP path: ')
+        if sftp_path[0] != '/':
+            sftp_path = '/' + sftp_path
+        if sftp_path[-1] != '/':
+            sftp_path = sftp_path + '/'
+        return(sftp_path)
     
     def get_path(path_name):
         path = input('Enter %s path: ' % path_name)
@@ -132,30 +132,30 @@ if __name__ == "__main__":
             path = path + '/'
         return(path)
 
-    obj = BoxFTP()
+    obj = ConnectSFTP()
     i = int(input('1 - List Files,\n2 - Download File,\n3 - Upload File,\n4 - Exit.\nEnter your choice:'))
     
     if i == 1:
-        box_path = input('Enter Box path: ')
-        box_path = obj._check_path(box_path, True)
-        file_list = obj.ListFiles(box_path)
+        sftp_path = input('Enter SFTP path: ')
+        sftp_path = obj._check_path(sftp_path, True)
+        file_list = obj.ListFiles(sftp_path)
         print(file_list)
         
     elif i == 2:
-        box_path = input('Enter Box path: ')
-        box_path = obj._check_path(box_path, True)
+        sftp_path = input('Enter SFTP path: ')
+        sftp_path = obj._check_path(sftp_path, True)
         download_path = input('Enter download path: ')
         download_path = obj._check_path(download_path, False)
         filename = input('Enter file name: ')
-        obj.DownloadFile(box_path, download_path, filename)
+        obj.DownloadFile(sftp_path, download_path, filename)
         
     elif i == 3:
-        box_path = input('Enter Box path: ')
-        box_path = obj._check_path(box_path, True)
+        sftp_path = input('Enter SFTP path: ')
+        sftp_path = obj._check_path(sftp_path, True)
         source_path = input('Enter source path: ')
         source_path = obj._check_path(source_path, False)
         filename = input('Enter file name: ')
-        obj.UploadFile(box_path, source_path, filename)
+        obj.UploadFile(sftp_path, source_path, filename)
         
     else:
         exit()
