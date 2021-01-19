@@ -1,10 +1,10 @@
 Metadata-Version: 1.1
-Name: verysimplemodule
+Name: spike
 Version: 0.0.1
 Summary: My first Python package
 Home-page: UNKNOWN
-Author: Jason Dsouza
-Author-email: <youremail@email.com>
+Author: Jian Cao
+Author-email: <jccit@caltech.edu>
 License: UNKNOWN
 Description: My first Python package with a slightly longer description
 Keywords: python,first package

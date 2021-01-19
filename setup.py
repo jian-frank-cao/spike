@@ -7,10 +7,10 @@ LONG_DESCRIPTION = 'My first Python package with a slightly longer description'
 # Setting up
 setup(
        # the name must match the folder name 'verysimplemodule'
-        name="verysimplemodule", 
+        name="spike", 
         version=VERSION,
-        author="Jason Dsouza",
-        author_email="<youremail@email.com>",
+        author="Jian Cao",
+        author_email="<jccit@caltech.edu>",
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         packages=find_packages(),
