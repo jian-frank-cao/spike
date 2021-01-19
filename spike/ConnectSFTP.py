@@ -4,7 +4,7 @@ Created on Mon Jan 18 13:49:11 2021
 
 @author: Jian Cao
 
-Download and upload files from SFTP
+Download and upload files from/to SFTP
 """
 
 ## Set environment ------------------------------------------------------------
@@ -18,14 +18,6 @@ class ConnectSFTP:
         .ListFile(sftp_path, pattern)
         .DownloadFile(sftp_path, download_path, filename)
         .UploadFile(sftp_path, source_path, filename)
-    Parameters:     
-       sftp_path (str): path of the SFTP folder
-       pattern (str): string used in filtering files
-       download_path (str): path of the download folder
-       source_path (str): path of the source folder
-       filename (str): name of the target file   
-    Returns:     
-       int: sum of x and y
     """
     
     def __init__(self, sftp_host, sftp_username, sftp_passwd):
