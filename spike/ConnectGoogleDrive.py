@@ -16,15 +16,17 @@ from googleapiclient.http import MediaIoBaseDownload
 from googleapiclient.discovery import build, MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from googleapiclient.errors import HttpError
+# from googleapiclient.errors import HttpError
 import shutil
-import subprocess
 
 ## Define class ---------------------------------------------------------------
 class ConnectGoogleDrive:
     """Object that connects Google Drive
     Functions:
-        .SeachItem()
+        .CreateFolder(parents, folder_name)
+        .ListItems(item_name, parents)
+        .DownloadFile(download_path, file_name, file_id)
+        .UploadFile(source_path, parents, file_name)
     """
 
     def __init__(self, token_path):
@@ -57,6 +59,27 @@ class ConnectGoogleDrive:
         return(path)
 
 
+    def CreateFolder(self, parents, folder_name):
+        """Create a folder
+        Parameters:     
+           parents (str): ID of the parent folder 
+           folder_name (str): name of the new folder
+        Returns:     
+           dict: {id, name, parents}
+        """ 
+        # prepare metadata
+        file_metadata = {
+            'name': folder_name,
+            'parents': [parents],
+            'mimeType': 'application/vnd.google-apps.folder'
+        }
+        # create folder
+        response = self.service.files().create(body=file_metadata,
+                            fields='id, name, parents').execute()
+        print('Folder {} has been created.'.format(folder_name))
+        return(response)
+
+
     def ListItems(self, item_name, parents):
         """List items (file/folder) by name or parents 
         Parameters:     
@@ -68,6 +91,7 @@ class ConnectGoogleDrive:
         if not item_name and not parents:
             print('No rules specified, exiting...')
             return None
+        # prepare query and item holder
         page_token = None
         item_list = []
         if item_name and parents:
@@ -77,6 +101,7 @@ class ConnectGoogleDrive:
             query = "name='{}'".format(item_name)
         else:
             query = "'{}' in parents".format(parents)
+        # list files
         while True:     
             response = self.service.files().list(
                         q = query,
@@ -96,3 +121,61 @@ class ConnectGoogleDrive:
         print('Found {} items.'.format(len(item_list)))
         return(item_list)
 
+
+    def DownloadFile(self, download_path, file_name, file_id):
+        """Download file from Google Drive to local disk
+        Parameters:     
+           download_path (str): path of the download folder
+           file_name (str): name of the target file   
+           file_id (str): ID of the target file
+        Returns:     
+           None
+        """ 
+        if not download_path or not file_name or not file_id:
+            print('DOWNLOAD_PATH, FILE_NAME, and FILE_ID are needed...')
+            return(None)
+        # download file
+        request = self.service.files().get_media(fileId=file_id)
+        fh = io.BytesIO()
+        downloader = MediaIoBaseDownload(fh, request)
+        done = False
+        while done is False:
+            status, done = downloader.next_chunk()
+            print("Download %d%%." % int(status.progress() * 100))
+        fh.seek(0)
+        # Write the received data to the file
+        with open(download_path + file_name, 'wb') as file: 
+            shutil.copyfileobj(fh, file)
+        print(download_path + file_name + ' is downloaded.')
+        
+        
+    def UploadFile(self, source_path, parents, file_name):
+        """Upload file from local disk to Google Drive
+        Parameters:     
+           source_path (str): path of the source folder
+           parents (str): ID of the target GD folder
+           file_name (str): name of the target file   
+        Returns:     
+           None
+        """ 
+        if not source_path or not parents or not file_name:
+            print('SOURCE_PATH, PARENTS, and FILE_NAME are needed...')
+            return(None)
+        # prepare metadata
+        file_metadata = {
+            'name': file_name,
+            'parents': [parents]
+        }
+        media = MediaFileUpload(source_path + file_name)
+        # upload file
+        response = self.service.files().create(
+                        body=file_metadata,
+                        media_body=media,
+                        fields='id, name, parents'
+                        ).execute()
+        print('{} {{}} is uploaded.'.format(response['name'],
+                                              response['id']))
+        
+        
+        
+        
