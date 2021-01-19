@@ -118,19 +118,6 @@ class ConnectSFTP:
         
 ## main -----------------------------------------------------------------------
 if __name__ == "__main__":
-    def get_sftp_path():
-        sftp_path = input('Enter SFTP path: ')
-        if sftp_path[0] != '/':
-            sftp_path = '/' + sftp_path
-        if sftp_path[-1] != '/':
-            sftp_path = sftp_path + '/'
-        return(sftp_path)
-    
-    def get_path(path_name):
-        path = input('Enter %s path: ' % path_name)
-        if path[-1] != '/':
-            path = path + '/'
-        return(path)
 
     obj = ConnectSFTP()
     i = int(input('1 - List Files,\n2 - Download File,\n3 - Upload File,\n4 - Exit.\nEnter your choice:'))
