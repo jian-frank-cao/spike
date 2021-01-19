@@ -35,7 +35,7 @@ class BoxFTP:
         print('Connected to Box FTP.')
 
 
-    def _check_path(path, is_box_path):
+    def _check_path(self, path, is_box_path):
         if path[-1] != '/':
             path = path + '/'
         if not is_box_path:
@@ -45,7 +45,7 @@ class BoxFTP:
         return(path)
 
 
-    def ListFile(self, box_path, pattern):
+    def ListFiles(self, box_path, pattern):
         """List files in box_path
         Parameters:     
            box_path (str): path of the Box folder
@@ -53,7 +53,7 @@ class BoxFTP:
         Returns:     
            list(str): list of file names
         """ 
-        box_path = _check_path(box_path, True)
+        box_path = self._check_path(box_path, True)
         self.ftp.cwd(box_path)
         file_list = self.ftp.nlst()
         file_list = [x for x in file_list if pattern in x]
@@ -69,8 +69,8 @@ class BoxFTP:
         Returns:     
            None
         """ 
-        box_path = _check_path(box_path, True)
-        download_path = _check_path(download_path, False)
+        box_path = self._check_path(box_path, True)
+        download_path = self._check_path(download_path, False)
         self.ftp.cwd(box_path)
         retry = True
         while retry:
@@ -97,8 +97,8 @@ class BoxFTP:
         Returns:     
            None
         """ 
-        box_path = _check_path(box_path, True)
-        source_path = _check_path(source_path, False)
+        box_path = self._check_path(box_path, True)
+        source_path = self._check_path(source_path, False)
         self.ftp.cwd(box_path)
         retry = True
         while retry:
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     if i == 1:
         box_path = input('Enter Box path: ')
         box_path = obj._check_path(box_path, True)
-        file_list = obj.ListFile(box_path)
+        file_list = obj.ListFiles(box_path)
         print(file_list)
         
     elif i == 2:
