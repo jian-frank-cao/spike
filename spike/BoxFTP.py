@@ -9,18 +9,16 @@ Download and upload files from Box
 
 ## Set environment ------------------------------------------------------------
 import os
-os.chdir('/home/ubuntu/twitter_monitor/coronavirus')
 from ftplib import FTP_TLS, error_perm
-import config
 
 ## Define class ---------------------------------------------------------------
 class BoxFTP:
-    def __int__(self):
+    def __int__(self, box_host, box_username, box_passwd):
         # connect to Box FTP using credentials
         # stored in config.py
-        ftp = FTP_TLS(config.box_host)
+        ftp = FTP_TLS(box_host)
         ftp.debugging = 2
-        ftp.login(config.box_username, config.box_passwd)
+        ftp.login(box_username, box_passwd)
         print('Connected to Box FTP.')
     def ListFile(self, box_path, pattern):
         self.ftp.cwd(box_path)
