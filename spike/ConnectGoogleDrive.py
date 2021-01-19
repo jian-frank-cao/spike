@@ -134,6 +134,7 @@ class ConnectGoogleDrive:
         if not download_path or not file_name or not file_id:
             print('DOWNLOAD_PATH, FILE_NAME, and FILE_ID are needed...')
             return(None)
+        download_path = self._check_path(download_path)
         # download file
         request = self.service.files().get_media(fileId=file_id)
         fh = io.BytesIO()
@@ -161,6 +162,7 @@ class ConnectGoogleDrive:
         if not source_path or not parents or not file_name:
             print('SOURCE_PATH, PARENTS, and FILE_NAME are needed...')
             return(None)
+        source_path = self._check_path(source_path)
         # prepare metadata
         file_metadata = {
             'name': file_name,
