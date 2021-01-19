@@ -6,7 +6,6 @@ LONG_DESCRIPTION = 'Includes tools that used for tranfering/processing data file
 
 # Setting up
 setup(
-       # the name must match the folder name 'verysimplemodule'
         name="spike", 
         version=VERSION,
         author="Jian Cao",
@@ -14,10 +13,8 @@ setup(
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         packages=find_packages(),
-        install_requires=['google-api-python-client', 'google-auth-httplib2', 'google-auth-oauthlib', ], # add any additional packages that 
-        # needs to be installed along with your package. Eg: 'caer'
-        
-        keywords=['python', 'first package'],
+        install_requires=['google-api-python-client', 'google-auth-httplib2', 'google-auth-oauthlib', ],
+        keywords=['python', 'toolbox'],
         classifiers= [
             "Development Status :: 3 - Alpha",
             "Intended Audience :: Education",
