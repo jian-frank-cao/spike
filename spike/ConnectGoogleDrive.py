@@ -45,11 +45,11 @@ class ConnectGoogleDrive:
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
                     'credentials.json', SCOPES)
-                creds = flow.run_local_server(port=0)
+                creds = flow.run_local_server(port = 0)
             # Save the credentials for the next run
             with open(token_path + 'token.pickle', 'wb') as token:
                 pickle.dump(creds, token)
-        self.service = build('drive', 'v3', credentials=creds)
+        self.service = build('drive', 'v3', credentials = creds)
         print("Connected to Google Drive")
 
 
@@ -74,8 +74,8 @@ class ConnectGoogleDrive:
             'mimeType': 'application/vnd.google-apps.folder'
         }
         # create folder
-        response = self.service.files().create(body=file_metadata,
-                            fields='id, name, parents').execute()
+        response = self.service.files().create(body = file_metadata,
+                            fields = 'id, name, parents').execute()
         print('Folder {} has been created.'.format(folder_name))
         return(response)
 
@@ -136,7 +136,7 @@ class ConnectGoogleDrive:
             return(None)
         download_path = self._check_path(download_path)
         # download file
-        request = self.service.files().get_media(fileId=file_id)
+        request = self.service.files().get_media(fileId = file_id)
         fh = io.BytesIO()
         downloader = MediaIoBaseDownload(fh, request)
         done = False
@@ -171,13 +171,29 @@ class ConnectGoogleDrive:
         media = MediaFileUpload(source_path + file_name)
         # upload file
         response = self.service.files().create(
-                        body=file_metadata,
-                        media_body=media,
-                        fields='id, name, parents'
+                        body = file_metadata,
+                        media_body = media,
+                        fields = 'id, name, parents'
                         ).execute()
         print('{} {{}} is uploaded.'.format(response['name'],
                                               response['id']))
-        
+
+
+    def MoveFile(self, file_id, new_parents):
+        if not file_id or not new_parents:
+            print('FIELD_ID and NEW_PARENTS are needed...')
+            return(None)
+        # Retrieve the existing parents to remove
+        response = self.service.files().get(fileId = file_id,
+                                         fields = 'parents').execute()
+        previous_parents = ",".join(response.get('parents'))
+        # Move the file to the new folder
+        response = self.service.files().update(fileId = file_id,
+                                        addParents = new_parents,
+                                        removeParents = previous_parents,
+                                        fields = 'id, name, parents').execute()
+        print('{} has been moved to {}.'.format(response['name'],
+                                              response['parents']))
         
         
         
