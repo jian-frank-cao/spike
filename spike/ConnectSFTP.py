@@ -5,6 +5,9 @@ Created on Mon Jan 18 13:49:11 2021
 @author: Jian Cao
 
 Download and upload files from/to SFTP
+
+ftplib reference:
+    https://docs.python.org/3/library/ftplib.html
 """
 
 ## Set environment ------------------------------------------------------------

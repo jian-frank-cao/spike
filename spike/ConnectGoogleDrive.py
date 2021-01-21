@@ -5,6 +5,9 @@ Created on Mon Jan 18 22:03:11 2021
 @author: Jian Cao
 
 Download and upload files from/to Google Drive
+
+Google Drive API v3 reference:
+    https://developers.google.com/drive/api/v3/manage-uploads
 """
 
 ## Set environment ------------------------------------------------------------
