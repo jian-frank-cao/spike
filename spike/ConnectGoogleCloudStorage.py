@@ -7,9 +7,6 @@ Created on Wed Jan 20 10:53:22 2021
 Download and upload files from/to Google Cloud Storage
 """
 
-token_path = '/home/jccit_caltech_edu/Election-dynamic-v2/twitter-277319-default.json'
-token_name = 'twitter-277319-default.json'
-
 ## Set environment ------------------------------------------------------------
 from google.cloud import storage
 from google.auth.exceptions import DefaultCredentialsError
