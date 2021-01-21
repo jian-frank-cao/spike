@@ -35,8 +35,8 @@ class ConnectGoogleDrive:
         # read token
         creds = None
         token_path = self._check_path(token_path)
-        if os.path.exists(token_path + 'token.pickle'):
-            with open(token_path + 'token.pickle', 'rb') as token:
+        if os.path.exists(token_path):
+            with open(token_path, 'rb') as token:
                 creds = pickle.load(token)
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
@@ -47,7 +47,7 @@ class ConnectGoogleDrive:
                     'credentials.json', SCOPES)
                 creds = flow.run_local_server(port = 0)
             # Save the credentials for the next run
-            with open(token_path + 'token.pickle', 'wb') as token:
+            with open(token_path, 'wb') as token:
                 pickle.dump(creds, token)
         self.service = build('drive', 'v3', credentials = creds)
         print("Connected to Google Drive")
@@ -123,7 +123,7 @@ class ConnectGoogleDrive:
 
 
     def DownloadFile(self, download_path, file_name, file_id):
-        """Download file from Google Drive to local disk
+        """Download a file from Google Drive to local disk
         Parameters:     
            download_path (str): path of the download folder
            file_name (str): name of the target file   
@@ -132,7 +132,7 @@ class ConnectGoogleDrive:
            None
         """ 
         if not download_path or not file_name or not file_id:
-            print('DOWNLOAD_PATH, FILE_NAME, and FILE_ID are needed...')
+            print('DOWNLOAD_PATH, FILE_NAME, and FILE_ID are needed.')
             return(None)
         download_path = self._check_path(download_path)
         # download file
@@ -151,7 +151,7 @@ class ConnectGoogleDrive:
         
         
     def UploadFile(self, source_path, parents, file_name):
-        """Upload file from local disk to Google Drive
+        """Upload a file from local disk to Google Drive
         Parameters:     
            source_path (str): path of the source folder
            parents (str): ID of the target GD folder
@@ -160,7 +160,7 @@ class ConnectGoogleDrive:
            None
         """ 
         if not source_path or not parents or not file_name:
-            print('SOURCE_PATH, PARENTS, and FILE_NAME are needed...')
+            print('SOURCE_PATH, PARENTS, and FILE_NAME are needed.')
             return(None)
         source_path = self._check_path(source_path)
         # prepare metadata
@@ -180,8 +180,15 @@ class ConnectGoogleDrive:
 
 
     def MoveFile(self, file_id, new_parents):
+        """Move a file from one GD folder to another
+        Parameters:   
+            file_id (str): ID of the target file
+            new_parents (str): ID of the destination GD folder
+        Returns:     
+           None
+        """ 
         if not file_id or not new_parents:
-            print('FIELD_ID and NEW_PARENTS are needed...')
+            print('FIELD_ID and NEW_PARENTS are needed.')
             return(None)
         # Retrieve the existing parents to remove
         response = self.service.files().get(fileId = file_id,
