@@ -21,8 +21,8 @@ class ConnectGoogleCloudStorage:
         .UploadFile(bucket_name, source_path,
                    file_name, bucket_folder = None)
         .DeleteFile(bucket_name, file_name, bucket_folder = None)
-        .MoveFile(origin_bucket_name, origin_bucket_folder,
-                 dest_bucket_name, dest_bucket_folder, file_name)
+        .MoveFile(from_bucket_name, from_bucket_folder,
+                 to_bucket_name, to_bucket_folder, file_name)
     """
     
     def __init__(self, token_path):
@@ -138,43 +138,43 @@ class ConnectGoogleCloudStorage:
         print(bucket_folder + file_name + ' is deleted.')
 
 
-    def MoveFile(self, origin_bucket_name, origin_bucket_folder,
-                 dest_bucket_name, dest_bucket_folder, file_name):
+    def MoveFile(self, from_bucket_name, from_bucket_folder,
+                 to_bucket_name, to_bucket_folder, file_name):
         """Move a file from one Storage bucket/folder to another
         Parameters:  
-            origin_bucket_name (str): name of the origin bucket.
-            origin_bucket_folder (str): path of the origin bucket folder.
+            from_bucket_name (str): name of the origin bucket.
+            from_bucket_folder (str): path of the origin bucket folder.
                                         Can be None.
-            dest_bucket_name (str): name of the dest bucket.
-            dest_bucket_folder (str): path of the dest bucket folder.
+            to_bucket_name (str): name of the dest bucket.
+            to_bucket_folder (str): path of the dest bucket folder.
                                         Can be None.
             file_name (str): name of the target file.
         Returns:     
            None
         """
-        if not origin_bucket_name or not dest_bucket_name or not file_name:
+        if not from_bucket_name or not to_bucket_name or not file_name:
             print('ORIGIN/DEST_BUCKET_NAME, FILE_NAME are needed.')
             return(None)
-        if origin_bucket_folder:
-            origin_bucket_folder = self._check_path(origin_bucket_folder)
+        if from_bucket_folder:
+            from_bucket_folder = self._check_path(from_bucket_folder)
         else:
-            origin_bucket_folder = ''
-        if dest_bucket_folder:
-            dest_bucket_folder = self._check_path(dest_bucket_folder)
+            from_bucket_folder = ''
+        if to_bucket_folder:
+            to_bucket_folder = self._check_path(to_bucket_folder)
         else:
-            dest_bucket_folder = ''
+            to_bucket_folder = ''
         # move file
-        origin_bucket = self.client.bucket(origin_bucket_name)
-        origin_blob = origin_bucket.blob(origin_bucket_folder + file_name)
-        dest_bucket = self.client.bucket(dest_bucket_name)
-        dest_blob = dest_bucket.blob(dest_bucket_folder + file_name)
+        origin_bucket = self.client.bucket(from_bucket_name)
+        origin_blob = origin_bucket.blob(from_bucket_folder + file_name)
+        dest_bucket = self.client.bucket(to_bucket_name)
+        dest_blob = dest_bucket.blob(to_bucket_folder + file_name)
         (token, _, __) = dest_blob.rewrite(origin_blob)
-        while token:
+        while token is not None:
             (token, _, __) = dest_blob.rewrite(origin_blob, token = token)
         if token is not None:
             print("Moving didn't finish.")
             return(None)
         origin_blob.delete()
         print(file_name + ' is moved to ' +
-              dest_bucket_name + '/' + dest_bucket_folder)
+              to_bucket_name + '/' + to_bucket_folder)
     

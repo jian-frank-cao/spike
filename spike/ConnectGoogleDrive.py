@@ -27,6 +27,8 @@ class ConnectGoogleDrive:
         .ListItems(item_name, parents)
         .DownloadFile(download_path, file_name, file_id)
         .UploadFile(source_path, parents, file_name)
+        .DeleteFile(file_id)
+        .MoveFile(file_id, new_parents)
     """
 
     def __init__(self, token_path):
@@ -62,7 +64,7 @@ class ConnectGoogleDrive:
     def CreateFolder(self, parents, folder_name):
         """Create a folder
         Parameters:     
-           parents (str): ID of the parent folder 
+           parents (str): ID of the parent folder
            folder_name (str): name of the new folder
         Returns:     
            dict: {id, name, parents}
@@ -76,15 +78,15 @@ class ConnectGoogleDrive:
         # create folder
         response = self.service.files().create(body = file_metadata,
                             fields = 'id, name, parents').execute()
-        print('Folder {} has been created.'.format(folder_name))
+        print(folder_name + ' is created.')
         return(response)
 
 
     def ListItems(self, item_name, parents):
         """List items (file/folder) by name or parents 
         Parameters:     
-           item_name (str): name of file/folder
-           parents (str): target folder ID 
+           item_name (str): name of file/folder. Can be None.
+           parents (str): target folder ID. Can be None.
         Returns:     
            list(dict): list of {id, name, parents}
         """ 
@@ -177,6 +179,21 @@ class ConnectGoogleDrive:
                         ).execute()
         print('{} {{}} is uploaded.'.format(response['name'],
                                               response['id']))
+
+
+    def DeleteFile(self, file_id):
+        """Delete a file from GD
+        Parameters:   
+            file_id (str): ID of the target file
+        Returns:     
+           None
+        """ 
+        if not file_id:
+            print('FIELD_ID is needed.')
+            return(None)
+        # delete file
+        _ = self.service.files().delete(fileId = file_id).execute()
+        print('"{}" is deleted.'.format(file_id))
 
 
     def MoveFile(self, file_id, new_parents):
