@@ -2,3 +2,4 @@ from spike.ConnectSFTP import ConnectSFTP
 from spike.ConnectGoogleDrive import ConnectGoogleDrive
 from spike.ConnectGoogleCloudStorage import ConnectGoogleCloudStorage
 from spike.FileCMD import FileCMD
+from spike.folder_to_google_drive import folder_to_google_drive
