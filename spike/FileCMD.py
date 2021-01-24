@@ -142,7 +142,7 @@ class FileCMD:
             _ = subprocess.call(command, shell=True)
         
 
-    out_filename = filename.split('.')[0]
-    subprocess.call(['7z', 'a', out_path + out_filename + '.7z', path + filename])
-    print(out_filename + ' is compressed.')
-    os.remove(path + filename)
+#    out_filename = filename.split('.')[0]
+#    subprocess.call(['7z', 'a', out_path + out_filename + '.7z', path + filename])
+#    print(out_filename + ' is compressed.')
+#    os.remove(path + filename)
