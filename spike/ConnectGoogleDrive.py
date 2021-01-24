@@ -172,7 +172,9 @@ class ConnectGoogleDrive:
             'name': file_name,
             'parents': [parents]
         }
-        media = MediaFileUpload(source_path + file_name)
+        media = MediaFileUpload(source_path + file_name,
+                                chunksize=1048576,
+                                resumable=True)
         # upload file
         response = self.service.files().create(
                         body = file_metadata,
