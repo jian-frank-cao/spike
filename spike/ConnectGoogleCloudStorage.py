@@ -36,6 +36,7 @@ class ConnectGoogleCloudStorage:
             # windows might get error:
             # 'ClientOptions' object has no attribute 'credentials_file'
             self.client = storage.Client.from_service_account_json(token_path)
+            print('Connected to Google Cloud Storage.')
         except DefaultCredentialsError as dce:
             print(dce)
             return(None)
