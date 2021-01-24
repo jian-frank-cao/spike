@@ -39,7 +39,6 @@ class ConnectGoogleDrive:
         SCOPES = ['https://www.googleapis.com/auth/drive']
         # read token
         creds = None
-        token_path = self._check_path(token_path)
         if os.path.exists(token_path):
             with open(token_path, 'rb') as token:
                 creds = pickle.load(token)
