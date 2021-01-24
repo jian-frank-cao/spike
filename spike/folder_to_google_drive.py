@@ -21,7 +21,8 @@ def folder_to_google_drive(token_path, source_path, gd_folder):
     google_drive = spike.ConnectGoogleDrive(token_path)
     file_cmd = spike.FileCMD()
     file_list = file_cmd.ListFiles(source_path)
-    print('Uploading...{{}}'.format(', '.join(file_list)))
+    print('Uploading...')
+    print('\n'.join(file_list))
     
     item_list = google_drive.ListItems(gd_folder, None)
     folder_id = item_list[0]['id']
