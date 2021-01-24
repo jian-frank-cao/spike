@@ -181,8 +181,7 @@ class ConnectGoogleDrive:
                         media_body = media,
                         fields = 'id, name, parents'
                         ).execute()
-        print('{} {{}} is uploaded.'.format(response['name'],
-                                              response['id']))
+        print('{} is uploaded.'.format(response['name']))
 
 
     def DeleteFile(self, file_id):
