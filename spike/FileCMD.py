@@ -61,7 +61,7 @@ class FileCMD:
         if pattern is None:
             pattern = ''
         file_list = [x for x in os.listdir(folder_path) if
-                     (pattern in x) and os.isfile(folder_path + x)]
+                     (pattern in x) and os.path.isfile(folder_path + x)]
         file_list.sort()
         return(file_list)
 
