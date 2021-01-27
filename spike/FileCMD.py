@@ -104,7 +104,8 @@ class FileCMD:
 
 
     def ZipFile(self, source_path, output_path,
-                file_name, password = None, zip_type = '7z'):
+                file_name, remove_raw = False,
+                password = None, zip_type = '7z'):
         """Zip a file
         Parameters:     
            source_path (str): path of the source folder.
@@ -133,13 +134,10 @@ class FileCMD:
             if password is not None:
                 command.append('-p"{}"'.format(password))
             _ = subprocess.call(command, shell=True)
-        elif 'zip' in zip_type.lower():
-            output_name = file_name.rsplit('.', 1)[0] + '.zip'
-            command = ['7z', 'a', output_path + output_name,
-                       source_path + file_name]
-            if password is not None:
-                command.append('-p"{}"'.format(password))
-            _ = subprocess.call(command, shell=True)
+            if remove_raw:
+                self.DeleteFile(source_path, file_name)
+        print(file_name + ' is zipped.')
+            
         
 
 #    out_filename = filename.split('.')[0]
