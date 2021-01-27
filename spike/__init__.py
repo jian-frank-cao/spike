@@ -3,3 +3,4 @@ from spike.ConnectGoogleDrive import ConnectGoogleDrive
 from spike.ConnectGoogleCloudStorage import ConnectGoogleCloudStorage
 from spike.FileCMD import FileCMD
 from spike.UploadFolderToGD import UploadFolderToGD
+from spike.DownloadFolderFromGD import DownloadFolderFromGD
