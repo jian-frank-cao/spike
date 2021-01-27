@@ -133,14 +133,8 @@ class FileCMD:
                        source_path + file_name]
             if password is not None:
                 command.append('-p"{}"'.format(password))
-            _ = subprocess.call(command, shell=True)
+            subprocess.call(command)
             if remove_raw:
                 self.DeleteFile(source_path, file_name)
         print(file_name + ' is zipped.')
             
-        
-
-#    out_filename = filename.split('.')[0]
-#    subprocess.call(['7z', 'a', out_path + out_filename + '.7z', path + filename])
-#    print(out_filename + ' is compressed.')
-#    os.remove(path + filename)
