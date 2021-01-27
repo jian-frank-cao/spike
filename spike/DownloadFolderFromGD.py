@@ -29,8 +29,9 @@ def DownloadFolderFromGD(token_path, download_path, gd_folder):
         print('There is no files to download. Exiting...')
         return(None)
     file_list = [x['name'] for x in item_list]
-    print('Download List:')
+    print('\nDownload List:')
     print('\n'.join(file_list))
+    print('')
     
     for item in item_list:
         google_drive.DownloadFile(download_path, item['name'], item['id'])
