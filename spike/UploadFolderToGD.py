@@ -21,7 +21,7 @@ def UploadFolderToGD(token_path, source_path, gd_folder):
     google_drive = spike.ConnectGoogleDrive(token_path)
     file_cmd = spike.FileCMD()
     file_list = file_cmd.ListFiles(source_path)
-    print('Uploading...')
+    print('Upload List:')
     print('\n'.join(file_list))
     
     item_list = google_drive.ListItems(gd_folder, None)

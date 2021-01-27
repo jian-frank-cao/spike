@@ -144,6 +144,7 @@ class ConnectGoogleDrive:
         fh = io.BytesIO()
         downloader = MediaIoBaseDownload(fh, request)
         done = False
+        print('Downloading {}'.format(file_name))
         while done is False:
             status, done = downloader.next_chunk()
             print("Download %d%%." % int(status.progress() * 100))
@@ -176,6 +177,7 @@ class ConnectGoogleDrive:
                                 chunksize=1048576,
                                 resumable=True)
         # upload file
+        print('Uploading {}'.format(file_name))
         response = self.service.files().create(
                         body = file_metadata,
                         media_body = media,

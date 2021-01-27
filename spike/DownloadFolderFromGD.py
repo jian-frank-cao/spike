@@ -29,7 +29,7 @@ def DownloadFolderFromGD(token_path, download_path, gd_folder):
         print('There is no files to download. Exiting...')
         return(None)
     file_list = [x['name'] for x in item_list]
-    print('Downloading...')
+    print('Download List:')
     print('\n'.join(file_list))
     
     for item in item_list:
