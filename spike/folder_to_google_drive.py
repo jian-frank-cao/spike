@@ -9,7 +9,7 @@ Move files from local folder to Google Drive
 
 import spike
 
-def folder_to_google_drive(token_path, source_path, gd_folder):
+def upload_folder_to_google_drive(token_path, source_path, gd_folder):
     """Move files from local folder to Google Drive
     Parameters: 
         token_path (str): path to the GD token.
