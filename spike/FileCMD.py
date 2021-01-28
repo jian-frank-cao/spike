@@ -164,7 +164,7 @@ class FileCMD:
             print('Output folder {} does not exist.'.format(output_path))
             return(None)
         if '7z' in zip_type.lower():
-            command = ['7z', 'x', source_path + file_name, '-o'.format(output_path)]
+            command = ['7z', 'x', source_path + file_name, '-o{}'.format(output_path)]
             if password is not None:
                 command.append('-p{}'.format(password))
             subprocess.call(command)
