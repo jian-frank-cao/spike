@@ -137,4 +137,39 @@ class FileCMD:
             if remove_raw:
                 self.DeleteFile(source_path, file_name)
         print(file_name + ' is zipped.')
-            
+
+
+    def UnzipFile(self, source_path, output_path,
+                file_name, remove_raw = False,
+                password = None, zip_type = '7z'):
+        """Unzip a file
+        Parameters:     
+           source_path (str): path of the source folder.
+           output_path (str): path of the output folder.
+           file_name (str): name of the target file.
+           password (str): password of the 7z/zip file.
+           zip_type (str): 7z/zip. Default 7z.
+        Returns:     
+           None
+        """ 
+        if not source_path or not output_path or not file_name:
+            print('SOURCE_PATH, OUTPUT_PATH, and FILE_NAME are needed.')
+            return(None)
+        source_path = self._check_path(source_path)
+        output_path = self._check_path(output_path)
+        if not os.path.isfile(source_path + file_name):
+            print(source_path + file_name + ' does not exist.')
+            return(None)
+        if not os.path.exists(output_path):
+            print('Output folder {} does not exist.'.format(output_path))
+            return(None)
+        if '7z' in zip_type.lower():
+            command = ['7z', 'x', source_path + file_name]
+            if password is not None:
+                command.append('-p"{}"'.format(password))
+            subprocess.call(command)
+            if remove_raw:
+                self.DeleteFile(source_path, file_name)
+        print(file_name + ' is unzipped.')
+
+
