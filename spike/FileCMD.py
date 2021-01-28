@@ -132,7 +132,7 @@ class FileCMD:
             command = ['7z', 'a', output_path + output_name,
                        source_path + file_name]
             if password is not None:
-                command.append('-p"{}"'.format(password))
+                command.append('-p{}'.format(password))
             subprocess.call(command)
             if remove_raw:
                 self.DeleteFile(source_path, file_name)
@@ -164,9 +164,9 @@ class FileCMD:
             print('Output folder {} does not exist.'.format(output_path))
             return(None)
         if '7z' in zip_type.lower():
-            command = ['7z', 'x', source_path + file_name]
+            command = ['7z', 'x', source_path + file_name, '-o'.format(output_path)]
             if password is not None:
-                command.append('-p"{}"'.format(password))
+                command.append('-p{}'.format(password))
             subprocess.call(command)
             if remove_raw:
                 self.DeleteFile(source_path, file_name)
