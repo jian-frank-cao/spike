@@ -63,11 +63,21 @@ class ConnectTwitterAPI:
             self.twitter_api = TwitterAPI(self.consumer_key,
                                          self.consumer_secret,
                                          auth_type='oAuth2')
-            self.tweet_count = 0
             print('oAuth2 connection is ready.')
         if any(x in self.api_type for x in ['lab_covid19', 'stream_v2']):
             self.bearer_token = self.GetBearerToken(self.consumer_key,
                                                     self.consumer_secret)
+
+
+    def _request_stream_v1(self):
+        if any(x not in self.input_dict for x in
+               ['keywords']):
+            raise ValueError('KEYWORDS is needed.')
+        # prepare query (add more rules in the query as needed)
+        query = {'track': self.input_dict['keywords']}
+        # make request
+        response = self.twitter_api.request('statuses/filter', query)
+        return(response)
 
 
     def _request_rest_v1(self):
@@ -88,14 +98,13 @@ class ConnectTwitterAPI:
         return(response)
 
 
-
     def _collect_tweets(self):
         if 'rest_v1' in self.api_type:
             n_tweets = 0
             response = self._request_rest_v1()
             self.request_headers = response.headers
             if not response.json() or 'statuses' not in response.json():
-                raise ValueError('Request failed.')   # change error category
+                raise TypeError ('"statuses" not in response.json().')
             tweets = response.json()['statuses']
             n_tweets = len(tweets)
             for tweet in tweets:
@@ -107,8 +116,14 @@ class ConnectTwitterAPI:
             self.tweet_count += n_tweets
             print('Downloaded {} tweets.'.format(self.tweet_count))
             self.input_dict['max_id'] = tweet['id'] - 1
+        
+        if 'stream_v1' in self.api_type:
+            response = self._request_stream_v1()
+            self.request_headers = response.headers
+            
+            
+            
         return(True)
-
 
 
     def _data_outlet(self, tweet):
@@ -145,7 +160,8 @@ class ConnectTwitterAPI:
 
 
     def Start(self, input_dict,
-              api_type = 'stream', outlet_type = 'local'):
+              api_type = 'stream_v1',
+              outlet_type = 'local'):
         """Start the monitor
         Parameters:     
            input_dict (dict): dict of input parameters 
@@ -164,6 +180,7 @@ class ConnectTwitterAPI:
         self.outlet_type = outlet_type.lower()
         self._get_ready()
         self.tweets = []
+        self.tweet_count = 0
         # start monitor
         last_error = datetime.now()
         error_count = 0
