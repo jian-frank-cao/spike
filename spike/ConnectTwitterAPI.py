@@ -15,6 +15,7 @@ import requests
 import uuid
 from datetime import datetime, timedelta
 from requests import HTTPError, ConnectionError
+from JianTwitterAPI import JianTwitterAPI
 from TwitterAPI import TwitterAPI, TwitterConnectionError, TwitterRequestError 
 
 ## Define class ---------------------------------------------------------------
@@ -58,13 +59,18 @@ class ConnectTwitterAPI:
                                          self.consumer_secret,
                                          self.access_token_key,
                                          self.access_token_secret)
-            print('oAuth1 connection is ready.')
+            print('Stream API v1.1 is ready.')
         if 'rest_v1' in self.api_type:
             self.twitter_api = TwitterAPI(self.consumer_key,
                                          self.consumer_secret,
                                          auth_type='oAuth2')
-            print('oAuth2 connection is ready.')
-        if any(x in self.api_type for x in ['lab_covid19', 'stream_v2']):
+            print('REST API v1.1 is ready.')
+        if 'lab_covid19' in self.api_type:
+            self.twitter_api = JianTwitterAPI(self.consumer_key,
+                                         self.consumer_secret,
+                                         auth_type='oAuth2')
+            print('Lab API COVID19 is ready.')
+        if any(x in self.api_type for x in ['stream_v2', 'rest_v2']): # modify this to use TwitterAPI
             self.bearer_token = self.GetBearerToken(self.consumer_key,
                                                     self.consumer_secret)
 
@@ -73,10 +79,10 @@ class ConnectTwitterAPI:
         if any(x not in self.input_dict for x in
                ['keywords']):
             raise ValueError('KEYWORDS is needed.')
-        # prepare query (add more rules in the query as needed)
-        query = {'track': self.input_dict['keywords']}
+        # prepare params 
+        params = {'track': self.input_dict['keywords']} # add more rules in the params as needed
         # make request
-        response = self.twitter_api.request('statuses/filter', query)
+        response = self.twitter_api.request('statuses/filter', params)
         return(response)
 
 
@@ -84,17 +90,29 @@ class ConnectTwitterAPI:
         if any(x not in self.input_dict for x in
                ['keywords', 'max_id', 'since_id']):
             raise ValueError('KEYWORDS, MAX_ID, and SINCE_ID are needed.')
-        # prepare query
+        # prepare params
         keywords = '(' + ') OR ('.join(self.input_dict['keywords']) + ')'
-        query = {'q': keywords,
+        params = {'q': keywords,
                  'max_id': self.input_dict['max_id'],
                  'since_id': self.input_dict['since_id'],
                  'count': 100,
                  'tweet_mode': 'extended'}
         if 'tweets_per_qry' in self.input_dict:
-            query['count'] = self.input_dict['tweets_per_qry']
+            params['count'] = self.input_dict['tweets_per_qry']
         # make request
-        response = self.twitter_api.request('search/tweets', query)
+        response = self.twitter_api.request('search/tweets', params)
+        return(response)
+
+
+    def _request_lab_covid19(self):
+        if any(x not in self.input_dict for x in
+               ['partition']):
+            raise ValueError('PARTITION is needed.')
+        # prepare params
+        params = {'partition': self.input_dict['partition']}
+        # make request
+        response = self.twitter_api.request('labs/1/tweets/stream/covid19',
+                                            params)
         return(response)
 
 
@@ -117,12 +135,27 @@ class ConnectTwitterAPI:
             print('Downloaded {} tweets.'.format(self.tweet_count))
             self.input_dict['max_id'] = tweet['id'] - 1
         
-        if 'stream_v1' in self.api_type:
-            response = self._request_stream_v1()
+        if any(x in self.api_type for x in ['stream_v1', 'lab_covid19']):
+            if 'stream_v1' in self.api_type:
+                response = self._request_stream_v1()
+            else:
+                response = self._request_lab_covid19()
+            if response.status_code != 200:
+                print(response.headers)
+                raise ConnectionError(response.text)
             self.request_headers = response.headers
-            
-            
-            
+            print('Collecting tweets...')
+            for item in response:
+                if 'text' in item:
+                    self._data_outlet(tweet)
+                elif 'disconnect' in item:
+                    event = item['disconnect']
+                    if event['code'] in [2,5,6,7]:
+                        raise Exception(event['reason']) # something needs to be fixed before re-connecting
+                    else:
+                        print(('Disconnect Code: ' + event['code'] +
+                              '. Reason: ' + event['reason']))
+                        return(True) # temporary interruption, re-try request
         return(True)
 
 
@@ -134,12 +167,18 @@ class ConnectTwitterAPI:
             # append tweet
             if tweet:
                 self.tweets.append(tweet)
-            # save file if exceeds tweets_per_file or tweet is None
-            tweets_per_file = 15000
-            if 'tweets_per_file' in self.input_dict:
-                tweets_per_file = self.input_dict['tweets_per_file']
-            if len(self.tweets) < tweets_per_file and tweet:
+            # determine if a file is ready
+            if 'count' in self.outlet_type:
+                file_is_ready = len(self.tweets) >= self.tweets_per_file
+            else:
+                if not isinstance(self.file_timer, datetime):
+                    self.file_timer = datetime.now()
+                file_is_ready = (datetime.now() - self.file_timer >=
+                                 self.minutes_per_file)
+            # file is not ready, continue adding tweets
+            if not file_is_ready and tweet:
                 return(None)
+            # save file
             tweet_time = self.tweets[-1]['created_at']
             time_format = '%a %b %d %H:%M:%S %z %Y'
             if 'v2' in self.api_type:
@@ -154,7 +193,11 @@ class ConnectTwitterAPI:
             with open(self.input_dict['download_path'] +
                       file_name, 'w') as file:
                 file.write(json.dumps(self.tweets))
-            print(file_name + ' is saved.')
+            if 'count' in self.outlet_type:
+                print(file_name + ' is saved.')
+            else:
+                print('{} ----- {} tweets'.format(str(file_time),
+                      str(len(self.tweets))))
             # clean self.tweets
             self.tweets = []
 
@@ -179,8 +222,18 @@ class ConnectTwitterAPI:
         self.api_type = api_type.lower()
         self.outlet_type = outlet_type.lower()
         self._get_ready()
+        if 'count' in self.outlet_type:
+            self.tweets_per_file = 15000
+            self.tweet_count = 0
+            if 'tweets_per_file' in self.input_dict:
+                self.tweets_per_file = self.input_dict['tweets_per_file']
+        else:
+            self.minutes_per_file = timedelta(minutes = 15)
+            self.file_timer = None
+            if 'minutes_per_file' in self.input_dict:
+                self.minutes_per_file = timedelta(
+                        minutes = int(self.input_dict['minutes_per_file']))
         self.tweets = []
-        self.tweet_count = 0
         # start monitor
         last_error = datetime.now()
         error_count = 0
