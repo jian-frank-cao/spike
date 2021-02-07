@@ -138,18 +138,23 @@ class ConnectTwitterAPI:
         if any(x in self.api_type for x in ['stream_v1', 'lab_covid19']):
             if 'stream_v1' in self.api_type:
                 response = self._request_stream_v1()
+                print('Connected to Stream API v1.1.')
+                print('First 10 keywords: ' +
+                      ', '.join(self.input_dict['keywords'][:10]) + '.')
             else:
                 response = self._request_lab_covid19()
+                print(('Connected to Lab COVID19 partition ' +
+                       str(self.input_dict['partition'])))
             if response.status_code != 200:
                 print(response.headers)
                 raise ConnectionError(response.text)
             self.request_headers = response.headers
             print('Collecting tweets...')
-            for item in response:
-                if 'text' in item:
+            for tweet in response:
+                if 'text' in tweet:
                     self._data_outlet(tweet)
-                elif 'disconnect' in item:
-                    event = item['disconnect']
+                elif 'disconnect' in tweet:
+                    event = tweet['disconnect']
                     if event['code'] in [2,5,6,7]:
                         raise Exception(event['reason']) # something needs to be fixed before re-connecting
                     else:
