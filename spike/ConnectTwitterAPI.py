@@ -237,7 +237,7 @@ class ConnectTwitterAPI:
             self.file_timer = None
             if 'minutes_per_file' in self.input_dict:
                 self.minutes_per_file = timedelta(
-                        minutes = int(self.input_dict['minutes_per_file']))
+                        minutes = float(self.input_dict['minutes_per_file']))
         self.tweets = []
         # start monitor
         last_error = datetime.now()
