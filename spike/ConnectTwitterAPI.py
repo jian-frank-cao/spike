@@ -173,6 +173,7 @@ class ConnectTwitterAPI:
             if tweet:
                 self.tweets.append(tweet)
             # determine if a file is ready
+            file_is_ready = False
             if 'count' in self.outlet_type:
                 file_is_ready = len(self.tweets) >= self.tweets_per_file
             else:
@@ -180,6 +181,8 @@ class ConnectTwitterAPI:
                     self.file_timer = datetime.now()
                 file_is_ready = (datetime.now() - self.file_timer >=
                                  self.minutes_per_file)
+                if file_is_ready:
+                    self.file_timer = datetime.now()
             # file is not ready, continue adding tweets
             if not file_is_ready and tweet:
                 return(None)
