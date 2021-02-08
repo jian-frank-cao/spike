@@ -38,7 +38,7 @@ class ConnectTwitterAPI:
         self.tweets = []
 
 
-    def GetBearerToken(self, key, secret):
+    def GetBearerToken(self, key, secret):  # might not be necessary if use TwitterAPI
         response = requests.post("https://api.twitter.com/oauth2/token",
                                  auth=(key, secret),
                                  data={'grant_type': 'client_credentials'},
@@ -46,7 +46,7 @@ class ConnectTwitterAPI:
         if response.status_code != 200:
             print(response.status_code)
             print(response.text)
-            raise ValueError("Bearer token error")
+            raise Exception("Bearer token error")
         body = response.json()
         print("Bearer token is ready.")
         return body['access_token']
@@ -55,33 +55,53 @@ class ConnectTwitterAPI:
     def _get_ready(self):
         self.twitter_api = None
         self.bearer_token = None
+        
         if 'stream_v1' in self.api_type:
             self.twitter_api = JianTwitterAPI(self.consumer_key,
                                          self.consumer_secret,
                                          self.access_token_key,
                                          self.access_token_secret)
             print('Stream API v1.1 is ready.')
+            
         if 'rest_v1' in self.api_type:
             self.twitter_api = JianTwitterAPI(self.consumer_key,
                                          self.consumer_secret,
                                          auth_type='oAuth2')
             print('REST API v1.1 is ready.')
-        if 'lab_covid19' in self.api_type:
+            
+        if 'lab_covid19' in self.api_type:   # find a way to combine this
             self.twitter_api = JianTwitterAPI(self.consumer_key,
                                          self.consumer_secret,
                                          auth_type='oAuth2')
             print('Lab API COVID19 is ready.')
+            
         if any(x in self.api_type for x in ['stream_v2', 'rest_v2']): # modify this to use TwitterAPI
             self.bearer_token = self.GetBearerToken(self.consumer_key,
                                                     self.consumer_secret)
+        
+        if 'local' in self.outlet_type:
+            if 'count' in self.outlet_type:
+                self.tweets_per_file = 15000
+                self.tweet_count = 0
+                if 'tweets_per_file' in self.input_dict:
+                    self.tweets_per_file = self.input_dict['tweets_per_file']
+            else:
+                self.minutes_per_file = timedelta(minutes = 15)
+                self.file_timer = None
+                if 'minutes_per_file' in self.input_dict:
+                    self.minutes_per_file = timedelta(
+                        minutes = float(self.input_dict['minutes_per_file']))
+            
 
 
     def _request_stream_v1(self):
         if any(x not in self.input_dict for x in
                ['keywords']):
             raise ValueError('KEYWORDS is needed.')
+        
         # prepare params 
         params = {'track': self.input_dict['keywords']} # add more rules in the params as needed
+        
         # make request
         response = self.twitter_api.request('statuses/filter', params)
         return(response)
@@ -91,6 +111,7 @@ class ConnectTwitterAPI:
         if any(x not in self.input_dict for x in
                ['keywords', 'max_id', 'since_id']):
             raise ValueError('KEYWORDS, MAX_ID, and SINCE_ID are needed.')
+        
         # prepare params
         keywords = '(' + ') OR ('.join(self.input_dict['keywords']) + ')'
         params = {'q': keywords,
@@ -100,6 +121,7 @@ class ConnectTwitterAPI:
                  'tweet_mode': 'extended'}
         if 'tweets_per_qry' in self.input_dict:
             params['count'] = self.input_dict['tweets_per_qry']
+        
         # make request
         response = self.twitter_api.request('search/tweets', params)
         return(response)
@@ -109,8 +131,10 @@ class ConnectTwitterAPI:
         if any(x not in self.input_dict for x in
                ['partition']):
             raise ValueError('PARTITION is needed.')
+        
         # prepare params
         params = {'partition': self.input_dict['partition']}
+        
         # make request
         response = self.twitter_api.request('labs/1/tweets/stream/covid19',
                                             params)
@@ -146,7 +170,7 @@ class ConnectTwitterAPI:
                 response = self._request_lab_covid19()
                 print(('Connected to Lab API COVID19 partition ' +
                        str(self.input_dict['partition'])))
-            #if response.status_code != 200:       # this might not be necessary
+            #if response.status_code != 200:       # this has been down in TwitterAPI
             #    print(response.headers)
             #    raise ConnectionError(response.text)
             self.twitter_headers = response.headers
@@ -162,7 +186,7 @@ class ConnectTwitterAPI:
                         print(('Disconnect Code: ' + event['code'] +
                               '. Reason: ' + event['reason']))
                         return(True) # temporary interruption, re-try request
-        return(True)
+        return(True)  # for rest api
 
 
     def _data_outlet(self, tweet):
@@ -173,7 +197,7 @@ class ConnectTwitterAPI:
             # append tweet
             if tweet:
                 self.tweets.append(tweet)
-            # determine if a file is ready
+            # determine if the file is ready
             file_is_ready = False
             if 'count' in self.outlet_type:
                 file_is_ready = len(self.tweets) >= self.tweets_per_file
@@ -202,6 +226,7 @@ class ConnectTwitterAPI:
             with open(self.input_dict['download_path'] +
                       file_name, 'w') as file:
                 file.write(json.dumps(self.tweets))
+            # confirmation message
             if 'count' in self.outlet_type:
                 print(file_name + ' is saved.')
             else:
@@ -231,26 +256,18 @@ class ConnectTwitterAPI:
            None
         """ 
         
-        if not api_type or not outlet_type:
-            raise ValueError('API_TYPE and OUTLET_TYPE are needed.')
+        if not input_dict or not api_type or not outlet_type:
+            raise ValueError('INPUT_DICT, API_TYPE and ' +
+                             'OUTLET_TYPE are needed.')
+        
+        # get ready
         self.input_dict = input_dict
         self.api_type = api_type.lower()
         self.outlet_type = outlet_type.lower()
         self._get_ready()
-        if 'count' in self.outlet_type:
-            self.tweets_per_file = 15000
-            self.tweet_count = 0
-            if 'tweets_per_file' in self.input_dict:
-                self.tweets_per_file = self.input_dict['tweets_per_file']
-        else:
-            self.minutes_per_file = timedelta(minutes = 15)
-            self.file_timer = None
-            if 'minutes_per_file' in self.input_dict:
-                self.minutes_per_file = timedelta(
-                        minutes = float(self.input_dict['minutes_per_file']))
+        
         # start monitor
-        last_error = datetime.now()
-        error_count = 0
+        last_error = None
         go = True
         while go:
             retry = False
@@ -280,6 +297,9 @@ class ConnectTwitterAPI:
                     time.sleep(2.1)
                 continue
             print(self.twitter_headers)
+            if not isinstance(last_error, datetime):
+                last_error = datetime.now()
+                error_count = 0
             if datetime.now() - last_error > timedelta(seconds = 900):
                 error_count = 0
             wait = min(0.25 * 2**error_count, 30)
