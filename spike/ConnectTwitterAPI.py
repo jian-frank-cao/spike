@@ -16,7 +16,7 @@ import uuid
 from datetime import datetime, timedelta
 from requests import HTTPError, ConnectionError
 from JianTwitterAPI import JianTwitterAPI, TwitterConnectionError, TwitterRequestError
-from TwitterAPI import TwitterAPI
+# from TwitterAPI import TwitterAPI     # either use JianTwitterAPI or monkey patch TwitterAPI
 
 ## Define class ---------------------------------------------------------------
 class ConnectTwitterAPI:
@@ -146,9 +146,9 @@ class ConnectTwitterAPI:
                 response = self._request_lab_covid19()
                 print(('Connected to Lab API COVID19 partition ' +
                        str(self.input_dict['partition'])))
-            if response.status_code != 200:
-                print(response.headers)
-                raise ConnectionError(response.text)
+            #if response.status_code != 200:       # this might not be necessary
+            #    print(response.headers)
+            #    raise ConnectionError(response.text)
             self.twitter_headers = response.headers
             print('Collecting tweets...')
             for tweet in response:
