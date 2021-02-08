@@ -35,6 +35,7 @@ class ConnectTwitterAPI:
         self.consumer_secret = consumer_secret
         self.access_token_key = access_token_key
         self.access_token_secret = access_token_secret
+        self.tweets = []
 
 
     def GetBearerToken(self, key, secret):
@@ -143,7 +144,7 @@ class ConnectTwitterAPI:
                       ', '.join(self.input_dict['keywords'][:10]) + '.')
             else:
                 response = self._request_lab_covid19()
-                print(('Connected to Lab COVID19 partition ' +
+                print(('Connected to Lab API COVID19 partition ' +
                        str(self.input_dict['partition'])))
             if response.status_code != 200:
                 print(response.headers)
@@ -247,7 +248,6 @@ class ConnectTwitterAPI:
             if 'minutes_per_file' in self.input_dict:
                 self.minutes_per_file = timedelta(
                         minutes = float(self.input_dict['minutes_per_file']))
-        self.tweets = []
         # start monitor
         last_error = datetime.now()
         error_count = 0
