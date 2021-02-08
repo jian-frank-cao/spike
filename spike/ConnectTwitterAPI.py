@@ -148,8 +148,7 @@ class ConnectTwitterAPI:
             if response.status_code != 200:
                 print(response.headers)
                 raise ConnectionError(response.text)
-            self.request_headers = response.headers
-            self.request_text = response.text
+            self.twitter_headers = response.headers
             print('Collecting tweets...')
             for tweet in response:
                 if 'text' in tweet:
@@ -280,8 +279,7 @@ class ConnectTwitterAPI:
                 if 'rest_v1' in self.api_type:
                     time.sleep(2.1)
                 continue
-            print(self.request_headers)
-            print(self.request_text)
+            print(self.twitter_headers)
             if datetime.now() - last_error > timedelta(seconds = 900):
                 error_count = 0
             wait = min(0.25 * 2**error_count, 30)
