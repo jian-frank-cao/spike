@@ -46,7 +46,7 @@ class ConnectTwitterAPI:
         if response.status_code != 200:
             print(response.status_code)
             print(response.text)
-            raise Exception("Bearer token error")
+            raise ValueError("Bearer token error")
         body = response.json()
         print("Bearer token is ready.")
         return body['access_token']
