@@ -149,6 +149,7 @@ class ConnectTwitterAPI:
                 print(response.headers)
                 raise ConnectionError(response.text)
             self.request_headers = response.headers
+            self.request_text = response.text
             print('Collecting tweets...')
             for tweet in response:
                 if 'text' in tweet:
@@ -206,6 +207,12 @@ class ConnectTwitterAPI:
             else:
                 print('{} ----- {} tweets'.format(str(file_time),
                       str(len(self.tweets))))
+            # check stall warnings
+            if ('warning' in self.tweets[0] and
+                'percent_full' in tweet['warning']):
+                if tweet['warning']['percent_full'] > 0: # change threshold when debugging is done.
+                    print('Warning: the queue is ' + 
+                          str(tweet['warning']['percent_full']) + '% full.')
             # clean self.tweets
             self.tweets = []
 
@@ -268,12 +275,13 @@ class ConnectTwitterAPI:
             except TwitterRequestError as tre:
                 print('[Caught TwitterRequestError]\n' + str(tre))
                 retry = True
-            # retry strategy                    need to re-write this
+            # retry strategy                    # need to re-write this
             if not retry:
                 if 'rest_v1' in self.api_type:
                     time.sleep(2.1)
                 continue
             print(self.request_headers)
+            print(self.request_text)
             if datetime.now() - last_error > timedelta(seconds = 900):
                 error_count = 0
             wait = min(0.25 * 2**error_count, 30)
