@@ -15,8 +15,8 @@ import requests
 import uuid
 from datetime import datetime, timedelta
 from requests import HTTPError, ConnectionError
-from JianTwitterAPI import JianTwitterAPI
-from TwitterAPI import TwitterAPI, TwitterConnectionError, TwitterRequestError 
+from JianTwitterAPI import JianTwitterAPI, TwitterConnectionError, TwitterRequestError
+from TwitterAPI import TwitterAPI
 
 ## Define class ---------------------------------------------------------------
 class ConnectTwitterAPI:
@@ -56,13 +56,13 @@ class ConnectTwitterAPI:
         self.twitter_api = None
         self.bearer_token = None
         if 'stream_v1' in self.api_type:
-            self.twitter_api = TwitterAPI(self.consumer_key,
+            self.twitter_api = JianTwitterAPI(self.consumer_key,
                                          self.consumer_secret,
                                          self.access_token_key,
                                          self.access_token_secret)
             print('Stream API v1.1 is ready.')
         if 'rest_v1' in self.api_type:
-            self.twitter_api = TwitterAPI(self.consumer_key,
+            self.twitter_api = JianTwitterAPI(self.consumer_key,
                                          self.consumer_secret,
                                          auth_type='oAuth2')
             print('REST API v1.1 is ready.')
