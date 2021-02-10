@@ -111,7 +111,7 @@ class ConnectGoogleDrive:
                         q = query,
                         spaces = 'drive',        
                         pageSize = 10,
-                        fields = "nextPageToken, files(id, name, parents)",
+                        fields = "nextPageToken, files(id, name, parents, size)",
                         pageToken = page_token
                         ).execute()
             items = response.get('files', [])
