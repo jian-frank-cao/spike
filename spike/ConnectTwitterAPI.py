@@ -224,7 +224,7 @@ class ConnectTwitterAPI:
 
             
     def _save_locally(self):
-        if self.outlet_type == 'local' and not self.file_timer:
+        if self.outlet_type == 'local' and hasattr(self, 'file_timer'):
             self.file_timer = datetime.now() + self.minutes_per_file
         print('Start saving tweets into local TXT files...')
         while True:
