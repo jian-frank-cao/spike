@@ -80,14 +80,14 @@ class ConnectTwitterAPI:
                                                     self.consumer_secret)
         
         # prepare requests
-        if 'stream_v1' in self.api_type:
+        if self.api_type == 'stream_v1':
             if any(x not in self.input_dict for x in
                ['keywords']):
                 raise ValueError('KEYWORDS is needed.')
             self.resource = 'statuses/filter'
             self.params = {'track': self.input_dict['keywords']} # add more rules in the params as needed
         
-        if 'rest_v1' in self.api_type:
+        if self.api_type == 'rest_v1':
             if any(x not in self.input_dict for x in
                    ['keywords', 'max_id', 'since_id']):
                 raise ValueError('KEYWORDS, MAX_ID, and SINCE_ID are needed.')
@@ -102,7 +102,7 @@ class ConnectTwitterAPI:
                 self.params['count'] = self.input_dict['tweets_per_qry']
             self.tweet_downloaded = 0
         
-        if 'lab_covid19' in self.api_type:
+        if self.api_type == 'lab_covid19':
             if any(x not in self.input_dict for x in
                    ['partition']):
                 raise ValueError('PARTITION is needed.')
@@ -110,11 +110,12 @@ class ConnectTwitterAPI:
             self.resource = 'labs/1/tweets/stream/covid19'
         
         # prepare outlet
-        if not self.pipe_in or not self.pip_out:
-            self.pipe_in, self.pip_out = multiprocessing.Pipe()
+        if not hasattr(self, 'pipe_in') or not hasattr(self, 'pipe_out'):
+            self.pipe_in, self.pipe_out = multiprocessing.Pipe()
         if ('local' in self.outlet_type and 
-            not self.tweets):
+            not hasattr(self, 'tweets')):
             self.tweets = []
+            self.tweet_count = 0
         if self.outlet_type == 'local_count':
             self.tweets_per_file = 15000
             if 'tweets_per_file' in self.input_dict:
@@ -209,6 +210,7 @@ class ConnectTwitterAPI:
                     time.sleep(2.1)
                 continue
             print(self.request.headers)
+            self.request.close
             if not last_error:
                 last_error = datetime.now()
                 error_count = 0
