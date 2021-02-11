@@ -279,6 +279,9 @@ class ConnectTwitterAPI:
     def _tweet_outlet(self):
         go = True
         while go:
+            if 'local' in self.outlet_type:
+                go = self._save_locally()
+            """
             retry = False
             try:
                 if 'local' in self.outlet_type:
@@ -290,7 +293,7 @@ class ConnectTwitterAPI:
             if not retry:
                 continue
             print('Tweet outlet failed, resetting...')
-            time.sleep(0.25)
+            time.sleep(0.25)"""
 
 
     def StartMonitor(self, input_dict,
