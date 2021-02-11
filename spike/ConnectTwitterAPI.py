@@ -209,8 +209,8 @@ class ConnectTwitterAPI:
                 if 'rest_v1' in self.api_type:
                     time.sleep(2.1)
                 continue
-            print(self.request.headers)
-            self.request.close
+            print(self.response.headers)
+            self.response.close()
             if not last_error:
                 last_error = datetime.now()
                 error_count = 0
@@ -321,16 +321,16 @@ class ConnectTwitterAPI:
         self._get_ready()
         
         # start monitor
-        tweets_in = multiprocessing.Process(target = self._collect_tweets,
+        self.tweets_in = multiprocessing.Process(target = self._collect_tweets,
                                             args=())
-        tweets_out = multiprocessing.Process(target = self._tweet_outlet,
+        self.tweets_out = multiprocessing.Process(target = self._tweet_outlet,
                                             args=())
-        tweets_in.start()
-        tweets_out.start()
+        self.tweets_in.start()
+        self.tweets_out.start()
         
-    	# when processes finish
-        tweets_in.join()
-        tweets_out.join()
+    	# finish up
+        self.tweets_in.join()
+        self.tweets_out.join()
         self.pipe_in.close()
         self.pipe_out.close()
         
