@@ -55,7 +55,7 @@ class ConnectTwitterAPI:
     def _get_ready(self):
         # check input
         if not any([x == self.api_type for 
-                x in ['stream_v1', 'rest_v1', 'lab-covid19']]): # add stream_v2, rest_v2
+                x in ['stream_v1', 'rest_v1', 'lab_covid19']]): # add stream_v2, rest_v2
             raise Exception('API ' + self.api_type + 
                             ' is not currently supported')
         if not any([x == self.outlet_type for 
