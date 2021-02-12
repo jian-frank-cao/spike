@@ -196,7 +196,7 @@ class ConnectTwitterAPI:
                 print('[Caught ConnectionError]\n' + str(ce))
                 retry = True
             except TypeError as te:
-                print('[Caught TimeoutError]\n' + str(te))
+                print('[Caught TypeError]\n' + str(te))
                 retry = True
             except TwitterConnectionError as tce:
                 print('[Caught TwitterConnectionError]\n' + str(tce))
@@ -277,6 +277,7 @@ class ConnectTwitterAPI:
 
 
     def _tweet_outlet(self):
+        time.sleep(0.25)
         go = True
         while go:
             if 'local' in self.outlet_type:
