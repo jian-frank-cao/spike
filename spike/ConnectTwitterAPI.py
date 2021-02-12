@@ -280,7 +280,7 @@ class ConnectTwitterAPI:
         go = True
         while go:
             if 'local' in self.outlet_type:
-                go = self._save_locally()
+                go = self._save_locally() # find errors that may occur
             """
             retry = False
             try:
