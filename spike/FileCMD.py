@@ -111,6 +111,7 @@ class FileCMD:
            source_path (str): path of the source folder.
            output_path (str): path of the output folder.
            file_name (str): name of the target file.
+           remove_raw (bool): remove the raw file or not.
            password (str): password of the 7z/zip file.
            zip_type (str): 7z/zip. Default 7z.
         Returns:     
@@ -139,6 +140,38 @@ class FileCMD:
         print(file_name + ' is zipped.')
 
 
+    def ZipFolder(self, source_path, output_path,
+              pattern = '', remove_raw = False,
+              password = None, zip_type = '7z'):
+        """Zip files in a folder
+        Parameters:     
+           source_path (str): path of the source folder.
+           output_path (str): path of the output folder.
+           pattern (str): used to filter files.
+           remove_raw (bool): remove the raw files or not.
+           password (str): password of the 7z/zip file.
+           zip_type (str): 7z/zip. Default 7z.
+        Returns:     
+           None
+        """ 
+        if not source_path or not output_path:
+            print('SOURCE_PATH and OUTPUT_PATH are needed.')
+            return(None)
+        file_list = self.ListFiles(source_path, pattern)
+        if len(file_list) == 0:
+            print('No files in folder {' + source_path +
+                   '} need to be zipped.')
+            return(None)
+        for file_name in file_list:
+            self.ZipFile(source_path,
+                         output_path,
+                         file_name,
+                         remove_raw = remove_raw,
+                         password = password,
+                         zip_type = zip_type)
+        print('Files in folder {{}} are zipped.'.format(source_path))
+
+
     def UnzipFile(self, source_path, output_path,
                 file_name, remove_raw = False,
                 password = None, zip_type = '7z'):
@@ -164,7 +197,8 @@ class FileCMD:
             print('Output folder {} does not exist.'.format(output_path))
             return(None)
         if '7z' in zip_type.lower():
-            command = ['7z', 'x', source_path + file_name, '-o{}'.format(output_path)]
+            command = ['7z', 'x', source_path + file_name,
+                       '-o{}'.format(output_path)]
             if password is not None:
                 command.append('-p{}'.format(password))
             subprocess.call(command)
