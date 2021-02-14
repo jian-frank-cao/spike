@@ -13,7 +13,7 @@ setup(
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         packages=find_packages(),
-        install_requires=['google-api-python-client', 'google-auth-httplib2', 'google-auth-oauthlib', 'google-cloud', 'google-cloud-storage', 'TwitterAPI'],
+        install_requires=['google-api-python-client', 'google-auth-httplib2', 'google-auth-oauthlib', 'google-cloud', 'google-cloud-storage', 'TwitterAPI', 'pandas'],
         keywords=['python', 'toolbox'],
         classifiers= [
             "Development Status :: 3 - Alpha",
