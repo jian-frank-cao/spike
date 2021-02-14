@@ -5,3 +5,4 @@ from spike.FileCMD import FileCMD
 from spike.UploadFolderToGD import UploadFolderToGD
 from spike.DownloadFolderFromGD import DownloadFolderFromGD
 from spike.ConnectTwitterAPI import ConnectTwitterAPI
+from spike.ZipFolder import ZipFolder
