@@ -6,3 +6,4 @@ from spike.UploadFolderToGD import UploadFolderToGD
 from spike.DownloadFolderFromGD import DownloadFolderFromGD
 from spike.ConnectTwitterAPI import ConnectTwitterAPI
 from spike.ZipFolder import ZipFolder
+from spike.SyncFolderToCloudStorage import SyncFolderToCloudStorage
