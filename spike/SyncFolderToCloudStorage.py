@@ -101,7 +101,7 @@ def SyncFolderToCloudStorage(source_path,
                   '} have been synchronized to ' +
                   'Cloud Storage bucket {' + storage_bucket +
                   '}, folder {' + bucket_folder + '}.')
-            print('Waiting for the next update...')
+            print('Waiting for next update...')
             time.sleep(wait_next)
         
             
