@@ -169,7 +169,7 @@ class FileCMD:
                          remove_raw = remove_raw,
                          password = password,
                          zip_type = zip_type)
-        print('Files in folder {{}} are zipped.'.format(source_path))
+        print('Files in folder {' + source_path + '} are zipped')
 
 
     def UnzipFile(self, source_path, output_path,

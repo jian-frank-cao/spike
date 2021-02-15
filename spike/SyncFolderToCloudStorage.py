@@ -79,7 +79,7 @@ def SyncFolderToCloudStorage(source_path,
         for file_name in file_upload_list:
             try:
                 storage.UploadFile(storage_bucket,
-                                   source_path,
+                                   zip_path,
                                    file_name,
                                    bucket_folder)
                 marker = file_name
