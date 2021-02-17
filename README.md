@@ -1,5 +1,5 @@
 # spike
-Toolbox for:
+Python toolbox for:
 
 1. managing data files in Google Drive, Goolge Cloud Storage, SFTP, and local system.
 2. launching Twitter Stream/REST monitors*.
