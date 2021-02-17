@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.1' 
+VERSION = '0.1.0' 
 DESCRIPTION = "Jian's toolbox"
-LONG_DESCRIPTION = 'Includes tools that used for tranfering/processing data files'
+LONG_DESCRIPTION = 'Includes tools that used for tranfering/processing data files and launching twitter monitors.'
 
 # Setting up
 setup(
@@ -18,9 +18,8 @@ setup(
         classifiers= [
             "Development Status :: 3 - Alpha",
             "Intended Audience :: Education",
-            "Programming Language :: Python :: 2",
             "Programming Language :: Python :: 3",
-            "Operating System :: MacOS :: MacOS X",
-            "Operating System :: Microsoft :: Windows",
+            "Operating System :: MacOS",
+            "Operating System :: Ubuntu 18",
         ]
 )
