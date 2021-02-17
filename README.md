@@ -1,14 +1,27 @@
 # spike
 Python toolbox for:
 
-1. managing data files in Google Drive, Goolge Cloud Storage, SFTP, and local system.
-2. launching Twitter Stream/REST monitors*.
+1. launching Twitter Stream/REST monitors*.
+2. managing data files in Google Drive, Goolge Cloud Storage, SFTP, and local system.
 
 *A technical report for the Twitter monitors: [Reliable and Efficient Long-Term Social Media Monitoring](https://arxiv.org/pdf/2005.02442.pdf)
 
 ## Installation
 ```ruby
 pip3 install git+https://github.com/jian-frank-cao/spike.git@main
+```
+
+## Module: TwitterMonitor
+- ConnectTwitterAPI
+- SyncFolderToCloudStorage
+
+### TwitterMonitor.ConnectTwitterAPI
+```ruby
+from spike.TwitterMonitor import ConnectTwitterAPI
+twitter_api = ConnectTwitterAPI(consumer_key,
+                                consumer_secret,
+                                access_token_key,
+                                access_token_secret)
 ```
 
 ## Module: DataTools
@@ -305,11 +318,11 @@ DownloadFolderFromGD(token_path, download_path, gd_folder)
     """ 
 ```
 
-### DataTools.DownloadFolderFromGD
+### DataTools.UploadFolderToGD
 ```ruby
 """Function that moves files from local folder to Google Drive"""
-from spike.DataTools import DownloadFolderFromGD
-DownloadFolderFromGD(token_path, download_path, gd_folder)
+from spike.DataTools import UploadFolderToGD
+UploadFolderToGD(token_path, source_path, gd_folder)
     """
     Parameters: 
         token_path (str): path to the GD token.
