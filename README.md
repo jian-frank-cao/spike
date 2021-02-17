@@ -6,25 +6,65 @@ Python toolbox for:
 
 *A technical report for the Twitter monitors: [Reliable and Efficient Long-Term Social Media Monitoring](https://arxiv.org/pdf/2005.02442.pdf)
 
-## Installation
+## 1. Installation
 ```ruby
 pip3 install git+https://github.com/jian-frank-cao/spike.git@main
 ```
 
-## Module: TwitterMonitor
+## 2. Module: TwitterMonitor
 - ConnectTwitterAPI
 - SyncFolderToCloudStorage
 
 ### TwitterMonitor.ConnectTwitterAPI
 ```ruby
+"""Connects Twitter API, downloads tweets, and save them locally"""
 from spike.TwitterMonitor import ConnectTwitterAPI
 twitter_api = ConnectTwitterAPI(consumer_key,
                                 consumer_secret,
                                 access_token_key,
                                 access_token_secret)
+# launch monitor
+twitter_api.StartMonitor(input_dict, 
+                          api_type = 'stream_v1', 
+                          outlet_type = 'local')
+    """
+    Parameters:     
+       input_dict (dict): dict of input parameters 
+                           (see next block for details).
+       api_type (str): type of API:
+                            'stream_v1',
+                            'rest_v1'.
+       outlet_type (str): type of outlet: 
+                            'local',
+                            'local_count'
+    Returns:     
+       None
+    """ 
+```
+#### Example run: stream API, save file locally every 5 minutes
+```ruby
+twitter_api.StartMonitor(input_dict = {'keywords' : ['covid19', 'covid-19'],
+                                      'download_path': 'PATH/TO/FOLDER/',
+                                      'file_prefix': 'twitter-covid19-',
+                                      'minutes_per_file': 5},
+                        api_type = 'stream_v1',
+                        outlet_type = 'local')
+```
+#### Example run: rest API, save file locally every 15000 tweets
+```ruby
+twitter_api.StartMonitor(input_dict = {'keywords': '(covid19) OR (covid-19)'],
+                                    'max_id':   1358090529750331392,
+                                    'since_id': 1357738009202950148,
+                                    'download_path': 'PATH/TO/FOLDER/',
+                                    'file_prefix': 'twitter-covid19-',
+                                    'tweets_per_file': 15000},
+                        api_type = 'rest_v1',
+                        outlet_type = 'local_count')
 ```
 
-## Module: DataTools
+
+
+## 3. Module: DataTools
 - ConnectGoogleDrive
 - ConnectGoogleCloudStorage
 - ConnectSFTP
