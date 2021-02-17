@@ -63,7 +63,44 @@ twitter_api.StartMonitor(input_dict = {'keywords': '(covid19) OR (covid-19)'],
                         outlet_type = 'local_count')
 ```
 
-
+### TwitterMonitor.SyncFolderToCloudStorage
+```ruby
+"""Sync a folder to Google Cloud Storage regularly"""
+from spike.TwitterMonitor import SyncFolderToCloudStorage
+SyncFolderToCloudStorage(source_path,
+                        zip_path,
+                        token_path,
+                        storage_bucket,
+                        time_pos,
+                        remove_raw = True,
+                        password = None,
+                        bucket_folder = None,
+                        pattern = '',
+                        marker = None,
+                        time_format = '%Y-%m-%d-%H-%M-%S',
+                        delete_after_days = 7,
+                        wait_retry = 5,
+                        wait_next = 900)
+    """
+    Parameters: 
+        source_path (str): path to the source folder.
+        zip_path (str): path to the zip file folder.
+        token_path (str): path to the Storage token.
+        storage_bucket (str): name of the storage bucket.
+        time_pos ([start, end]): position of the time substring.
+        remove_raw (bool): remove the raw file after zipping or not.
+        password (str): password for encrypting the zip file.
+        bucket_folder (str): path of the bucket folder. Can be None.
+        pattern (str): pattern used in filtering the files being zipped.
+        marker (str): name of the last successful uploaded zip file.
+        time_format (str): used in converting time substring to datetime.
+        delete_after_days (int): number of days before a zip file is deleted.
+        wait_retry (int): number of seconds before next retry.
+        wait_next (int): number of seconds before next update.
+    Returns:     
+       None
+    """ 
+```
 
 ## 3. Module: DataTools
 - ConnectGoogleDrive
