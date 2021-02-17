@@ -1,2 +1,2 @@
-from . import ConnectTwitterAPI
-from . import SyncFolderToCloudStorage
+from TwitterMonitor.ConnectTwitterAPI import ConnectTwitterAPI
+from TwitterMonitor.SyncFolderToCloudStorage import SyncFolderToCloudStorage
