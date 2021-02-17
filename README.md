@@ -79,20 +79,11 @@ twitter_api.StartMonitor(input_dict = {'keywords': '(covid19) OR (covid-19)'],
 ```ruby
 """Sync a folder to Google Cloud Storage regularly"""
 from spike.TwitterMonitor import SyncFolderToCloudStorage
-SyncFolderToCloudStorage(source_path,
-                        zip_path,
-                        token_path,
-                        storage_bucket,
-                        time_pos,
-                        remove_raw = True,
-                        password = None,
-                        bucket_folder = None,
-                        pattern = '',
-                        marker = None,
+SyncFolderToCloudStorage(source_path, zip_path, token_path, storage_bucket,
+                        time_pos, remove_raw = True, password = None,
+                        bucket_folder = None, pattern = '', marker = None,
                         time_format = '%Y-%m-%d-%H-%M-%S',
-                        delete_after_days = 7,
-                        wait_retry = 5,
-                        wait_next = 900)
+                        delete_after_days = 7,  wait_retry = 5, wait_next = 900)
     """
     Parameters: 
         source_path (str): path to the source folder.
