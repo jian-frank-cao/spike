@@ -253,7 +253,7 @@ Functions:
 """Object that connects SFTP"""
 from spike.DataTools import ConnectSFTP
 
-sftp = ConnectSFTP(token_path)
+sftp = ConnectSFTP（sftp_host, sftp_username, sftp_passwd）
 ```
 ```ruby
 Functions:
