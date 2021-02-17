@@ -16,8 +16,9 @@ pip3 install git+https://github.com/jian-frank-cao/spike.git@main
 - SyncFolderToCloudStorage
 
 ### TwitterMonitor.ConnectTwitterAPI
+![flow chart](./twitter_monitor.png)
 ```ruby
-"""Connects Twitter API, downloads tweets, and save them locally"""
+"""Connects Twitter API, downloads tweets, and outlets to local files or stream services"""
 from spike.TwitterMonitor import ConnectTwitterAPI
 twitter_api = ConnectTwitterAPI(consumer_key,
                                 consumer_secret,
