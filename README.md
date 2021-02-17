@@ -32,6 +32,7 @@ pip3 install git+https://github.com/jian-frank-cao/spike.git@main
 ```ruby
 """Connects Twitter API, downloads tweets, and outlets to local files or stream services"""
 from spike.TwitterMonitor import ConnectTwitterAPI
+
 twitter_api = ConnectTwitterAPI(consumer_key,
                                 consumer_secret,
                                 access_token_key,
@@ -79,6 +80,7 @@ twitter_api.StartMonitor(input_dict = {'keywords': '(covid19) OR (covid-19)'],
 ```ruby
 """Sync a folder to Google Cloud Storage regularly"""
 from spike.TwitterMonitor import SyncFolderToCloudStorage
+
 SyncFolderToCloudStorage(source_path, zip_path, token_path, storage_bucket,
                         time_pos, remove_raw = True, password = None,
                         bucket_folder = None, pattern = '', marker = None,
@@ -117,6 +119,7 @@ SyncFolderToCloudStorage(source_path, zip_path, token_path, storage_bucket,
 ```ruby
 """Object that connects Google Drive"""
 from spike.DataTools import ConnectGoogleDrive
+
 drive = ConnectGoogleDrive(token_path)
 ```
 ```ruby
@@ -181,6 +184,7 @@ Functions:
 ```ruby
 """Object that connects Google Cloud Storage"""
 from spike.DataTools import ConnectGoogleCloudStorage
+
 storage = ConnectGoogleCloudStorage(token_path)
 ```
 ```ruby
@@ -248,6 +252,7 @@ Functions:
 ```ruby
 """Object that connects SFTP"""
 from spike.DataTools import ConnectSFTP
+
 sftp = ConnectSFTP(token_path)
 ```
 ```ruby
@@ -312,6 +317,7 @@ Functions:
 ```ruby
 """Object for file commands"""
 from spike.DataTools import FileCMD
+
 file_cmd = FileCMD()
 ```
 ```ruby
@@ -388,6 +394,7 @@ Functions:
 ```ruby
 """Function that moves files from local folder to Google Drive"""
 from spike.DataTools import DownloadFolderFromGD
+
 DownloadFolderFromGD(token_path, download_path, gd_folder)
     """
     Parameters: 
@@ -403,6 +410,7 @@ DownloadFolderFromGD(token_path, download_path, gd_folder)
 ```ruby
 """Function that moves files from local folder to Google Drive"""
 from spike.DataTools import UploadFolderToGD
+
 UploadFolderToGD(token_path, source_path, gd_folder)
     """
     Parameters: 
