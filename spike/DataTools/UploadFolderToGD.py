@@ -7,7 +7,7 @@ Created on Sun Jan 24 09:38:58 2021
 Move files from local folder to Google Drive
 """
 
-import spike
+from spike.DataTools import ConnectGoogleDrive
 
 def UploadFolderToGD(token_path, source_path, gd_folder):
     """Move files from local folder to Google Drive
@@ -18,7 +18,7 @@ def UploadFolderToGD(token_path, source_path, gd_folder):
     Returns:     
        None
     """ 
-    google_drive = spike.ConnectGoogleDrive(token_path)
+    google_drive = ConnectGoogleDrive(token_path)
     file_cmd = spike.FileCMD()
     file_list = file_cmd.ListFiles(source_path)
     print('\nUpload List:')

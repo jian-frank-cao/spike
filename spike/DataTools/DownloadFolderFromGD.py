@@ -7,7 +7,7 @@ Created on Wed Jan 27 10:54:44 2021
 Move files from Google Drive folder to local folder
 """
 token_path = '/home/jccit_caltech_edu/tokens/token.pickle'
-import spike
+from spike.DataTools import ConnectGoogleDrive
 
 def DownloadFolderFromGD(token_path, download_path, gd_folder):
     """Move files from local folder to Google Drive
@@ -18,7 +18,7 @@ def DownloadFolderFromGD(token_path, download_path, gd_folder):
     Returns:     
        None
     """ 
-    google_drive = spike.ConnectGoogleDrive(token_path)
+    google_drive = ConnectGoogleDrive(token_path)
     item_list = google_drive.ListItems(gd_folder, None)
     if len(item_list) > 1:
         print('Found multiple GD folders, Please rename the folder.')

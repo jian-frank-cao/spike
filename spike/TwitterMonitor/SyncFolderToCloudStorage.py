@@ -8,7 +8,7 @@ Sync Folder to Google Cloud Storage
 """
 
 # Setup
-import spike
+from spike.DataTools import ConnectGoogleCloudStorage, FileCMD
 import pandas as pd
 from datetime import datetime, timedelta
 import time
@@ -27,6 +27,25 @@ def SyncFolderToCloudStorage(source_path,
                             delete_after_days = 7,
                             wait_retry = 5,
                             wait_next = 900):
+    """Sync a folder to Google Cloud Storage
+    Parameters: 
+        source_path (str): path to the source folder.
+        zip_path (str): path to the zip file folder.
+        token_path (str): path to the Storage token.
+        storage_bucket (str): name of the storage bucket.
+        time_pos ([start, end]): position of the time substring.
+        remove_raw (bool): remove the raw file after zipping or not.
+        password (str): password for encrypting the zip file.
+        bucket_folder (str): path of the bucket folder. Can be None.
+        pattern (str): pattern used in filtering the files being zipped.
+        marker (str): name of the last successful uploaded zip file.
+        time_format (str): used in converting time substring to datetime.
+        delete_after_days (int): number of days before a zip file is deleted.
+        wait_retry (int): number of seconds before next retry.
+        wait_next (int): number of seconds before next update.
+    Returns:     
+       None
+    """ 
     if (not source_path or not zip_path or not token_path or
         not storage_bucket or not time_pos):
         raise ValueError('SOURCE_PATH, TOKEN_PATH, ZIP_PATH, ' +
@@ -35,10 +54,10 @@ def SyncFolderToCloudStorage(source_path,
     while True:
         retry = False
         # connect Cloud Storage
-        storage = spike.ConnectGoogleCloudStorage(token_path)
+        storage = ConnectGoogleCloudStorage(token_path)
         
         # prepare File CMD module
-        file_cmd = spike.FileCMD()
+        file_cmd = FileCMD()
         
         # zip files
         file_cmd.ZipFolder(source_path,
@@ -103,8 +122,3 @@ def SyncFolderToCloudStorage(source_path,
                   '}, folder {' + bucket_folder + '}.')
             print('Waiting for next update...')
             time.sleep(wait_next)
-        
-            
-            
-    
-    
