@@ -1,7 +1,7 @@
 # spike
 Python toolbox for:
 
-1. launching Twitter Stream/REST monitors*.
+1. deploying Twitter Stream/REST monitors*.
 2. managing data files in Google Drive, Goolge Cloud Storage, SFTP, and local system.
 
 *A technical report for the Twitter monitors: [Reliable and Efficient Long-Term Social Media Monitoring](https://arxiv.org/pdf/2005.02442.pdf)
