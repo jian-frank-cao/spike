@@ -392,7 +392,7 @@ Functions:
 
 ### DataTools.DownloadFolderFromGD
 ```ruby
-"""Function that moves files from local folder to Google Drive"""
+"""Function that downloads a folder from Google Drive to local local system"""
 from spike.DataTools import DownloadFolderFromGD
 
 DownloadFolderFromGD(token_path, download_path, gd_folder)
@@ -408,7 +408,7 @@ DownloadFolderFromGD(token_path, download_path, gd_folder)
 
 ### DataTools.UploadFolderToGD
 ```ruby
-"""Function that moves files from local folder to Google Drive"""
+"""Function that uploads a local folder to Google Drive"""
 from spike.DataTools import UploadFolderToGD
 
 UploadFolderToGD(token_path, source_path, gd_folder)
