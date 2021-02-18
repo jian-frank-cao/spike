@@ -14,7 +14,7 @@ def UploadFolderToGD(token_path, source_path, gd_folder):
     Parameters: 
         token_path (str): path to the GD token.
         source_path (str): path to the source folder.
-        folder_name (str): name of the GD folder.
+        gd_folder (str): name of the GD folder.
     Returns:     
        None
     """ 

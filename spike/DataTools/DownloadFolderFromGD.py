@@ -14,7 +14,7 @@ def DownloadFolderFromGD(token_path, download_path, gd_folder):
     Parameters: 
         token_path (str): path to the GD token.
         download_path (str): path to the download folder.
-        folder_name (str): name of the GD folder.
+        gd_folder (str): name of the GD folder.
     Returns:     
        None
     """ 
