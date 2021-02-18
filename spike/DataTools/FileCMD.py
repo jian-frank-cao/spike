@@ -17,7 +17,14 @@ class FileCMD:
     Functions:
         .CreateFolder(folder_path)
         .ListFiles(folder_path, pattern = None)
-
+        .MoveFile(self, from_path, to_path, file_name)
+        .DeleteFile(self, folder_path, file_name)
+        .ZipFile(self, source_path, output_path,
+                file_name, remove_raw = False,
+                password = None, zip_type = '7z')
+        .ZipFolder(self, source_path, output_path,
+              pattern = '', remove_raw = False,
+              password = None, zip_type = '7z')
     """
     
     def _check_path(self, path):
@@ -113,7 +120,7 @@ class FileCMD:
            file_name (str): name of the target file.
            remove_raw (bool): remove the raw file or not.
            password (str): password of the 7z/zip file.
-           zip_type (str): 7z/zip. Default 7z.
+           zip_type (str): 7z/zip. currently supports 7z.
         Returns:     
            None
         """ 
