@@ -1,10 +1,22 @@
 # spike
 Python toolbox for:
 
-1. launching Twitter Stream/REST monitors*.
+1. deploying Twitter Stream/REST monitors*.
 2. managing data files in Google Drive, Goolge Cloud Storage, SFTP, and local system.
 
 *A technical report for the Twitter monitors: [Reliable and Efficient Long-Term Social Media Monitoring](https://arxiv.org/pdf/2005.02442.pdf)
+
+- [1. Installation](https://github.com/jian-frank-cao/spike/blob/main/README.md#1-installation)
+- [2. Module: TwitterMonitor](https://github.com/jian-frank-cao/spike/blob/main/README.md#2-module-twittermonitor)
+    * [TwitterMonitor.ConnectTwitterAPI](https://github.com/jian-frank-cao/spike/blob/main/README.md#twittermonitorconnecttwitterapi)
+    * [TwitterMonitor.SyncFolderToCloudStorage](https://github.com/jian-frank-cao/spike/blob/main/README.md#twittermonitorsyncfoldertocloudstorage)
+- [3. Module: DataTools](https://github.com/jian-frank-cao/spike/blob/main/README.md#3-module-datatools)
+    * [DataTools.ConnectGoogleDrive](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectgoogledrive)
+    * [DataTools.ConnectGoogleCloudStorage](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectgooglecloudstorage)
+    * [DataTools.ConnectSFTP](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectsftp)
+    * [DataTools.FileCMD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsfilecmd)
+    * [DataTools.DownloadFolderFromGD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsdownloadfolderfromgd)
+    * [DataTools.UploadFolderToGD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsuploadfoldertogd)
 
 ## 1. Installation
 ```ruby
@@ -12,13 +24,15 @@ pip3 install git+https://github.com/jian-frank-cao/spike.git@main
 ```
 
 ## 2. Module: TwitterMonitor
-- ConnectTwitterAPI
-- SyncFolderToCloudStorage
+- [ConnectTwitterAPI](https://github.com/jian-frank-cao/spike/blob/main/README.md#twittermonitorconnecttwitterapi)
+- [SyncFolderToCloudStorage](https://github.com/jian-frank-cao/spike/blob/main/README.md#twittermonitorsyncfoldertocloudstorage)
 
 ### TwitterMonitor.ConnectTwitterAPI
+![flow chart](./twitter_monitor.png)
 ```ruby
-"""Connects Twitter API, downloads tweets, and save them locally"""
+"""Connects Twitter API, downloads tweets, and outlets to local files or stream services"""
 from spike.TwitterMonitor import ConnectTwitterAPI
+
 twitter_api = ConnectTwitterAPI(consumer_key,
                                 consumer_secret,
                                 access_token_key,
@@ -62,20 +76,50 @@ twitter_api.StartMonitor(input_dict = {'keywords': '(covid19) OR (covid-19)'],
                         outlet_type = 'local_count')
 ```
 
+### TwitterMonitor.SyncFolderToCloudStorage
+```ruby
+"""Sync a folder to Google Cloud Storage regularly"""
+from spike.TwitterMonitor import SyncFolderToCloudStorage
 
+SyncFolderToCloudStorage(source_path, zip_path, token_path, storage_bucket,
+                        time_pos, remove_raw = True, password = None,
+                        bucket_folder = None, pattern = '', marker = None,
+                        time_format = '%Y-%m-%d-%H-%M-%S',
+                        delete_after_days = 7,  wait_retry = 5, wait_next = 900)
+    """
+    Parameters: 
+        source_path (str): path to the source folder.
+        zip_path (str): path to the zip file folder.
+        token_path (str): path to the Storage token.
+        storage_bucket (str): name of the storage bucket.
+        time_pos ([start, end]): position of the time substring.
+        remove_raw (bool): remove the raw file after zipping or not.
+        password (str): password for encrypting the zip file.
+        bucket_folder (str): path of the bucket folder. Can be None.
+        pattern (str): pattern used in filtering the files being zipped.
+        marker (str): name of the last successful uploaded zip file.
+        time_format (str): used in converting time substring to datetime.
+        delete_after_days (int): number of days before a zip file is deleted.
+        wait_retry (int): number of seconds before next retry.
+        wait_next (int): number of seconds before next update.
+    Returns:     
+       None
+    """ 
+```
 
 ## 3. Module: DataTools
-- ConnectGoogleDrive
-- ConnectGoogleCloudStorage
-- ConnectSFTP
-- FileCMD
-- DownloadFolderFromGD
-- UploadFolderToGD
+- [ConnectGoogleDrive](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectgoogledrive)
+- [ConnectGoogleCloudStorage](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectgooglecloudstorage)
+- [ConnectSFTP](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectsftp)
+- [FileCMD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsfilecmd)
+- [DownloadFolderFromGD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsdownloadfolderfromgd)
+- [UploadFolderToGD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsuploadfoldertogd)
 
 ### DataTools.ConnectGoogleDrive
 ```ruby
 """Object that connects Google Drive"""
 from spike.DataTools import ConnectGoogleDrive
+
 drive = ConnectGoogleDrive(token_path)
 ```
 ```ruby
@@ -140,6 +184,7 @@ Functions:
 ```ruby
 """Object that connects Google Cloud Storage"""
 from spike.DataTools import ConnectGoogleCloudStorage
+
 storage = ConnectGoogleCloudStorage(token_path)
 ```
 ```ruby
@@ -207,7 +252,8 @@ Functions:
 ```ruby
 """Object that connects SFTP"""
 from spike.DataTools import ConnectSFTP
-sftp = ConnectSFTP(token_path)
+
+sftp = ConnectSFTP（sftp_host, sftp_username, sftp_passwd）
 ```
 ```ruby
 Functions:
@@ -271,6 +317,7 @@ Functions:
 ```ruby
 """Object for file commands"""
 from spike.DataTools import FileCMD
+
 file_cmd = FileCMD()
 ```
 ```ruby
@@ -345,14 +392,15 @@ Functions:
 
 ### DataTools.DownloadFolderFromGD
 ```ruby
-"""Function that moves files from local folder to Google Drive"""
+"""Function that downloads a folder from Google Drive to local local system"""
 from spike.DataTools import DownloadFolderFromGD
+
 DownloadFolderFromGD(token_path, download_path, gd_folder)
     """
     Parameters: 
         token_path (str): path to the GD token.
         download_path (str): path to the download folder.
-        folder_name (str): name of the GD folder.
+        gd_folder (str): name of the GD folder.
     Returns:     
        None
     """ 
@@ -360,14 +408,15 @@ DownloadFolderFromGD(token_path, download_path, gd_folder)
 
 ### DataTools.UploadFolderToGD
 ```ruby
-"""Function that moves files from local folder to Google Drive"""
+"""Function that uploads a local folder to Google Drive"""
 from spike.DataTools import UploadFolderToGD
+
 UploadFolderToGD(token_path, source_path, gd_folder)
     """
     Parameters: 
         token_path (str): path to the GD token.
         source_path (str): path to the source folder.
-        folder_name (str): name of the GD folder.
+        gd_folder (str): name of the GD folder.
     Returns:     
        None
     """ 
