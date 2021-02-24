@@ -6,17 +6,17 @@ Python toolbox for:
 
 *A technical report for the Twitter monitors: [Reliable and Efficient Long-Term Social Media Monitoring](https://arxiv.org/pdf/2005.02442.pdf)
 
-- [1. Installation](https://github.com/jian-frank-cao/spike/blob/main/README.md#1-installation)
-- [2. Module: TwitterMonitor](https://github.com/jian-frank-cao/spike/blob/main/README.md#2-module-twittermonitor)
-    * [TwitterMonitor.ConnectTwitterAPI](https://github.com/jian-frank-cao/spike/blob/main/README.md#twittermonitorconnecttwitterapi)
-    * [TwitterMonitor.SyncFolderToCloudStorage](https://github.com/jian-frank-cao/spike/blob/main/README.md#twittermonitorsyncfoldertocloudstorage)
-- [3. Module: DataTools](https://github.com/jian-frank-cao/spike/blob/main/README.md#3-module-datatools)
-    * [DataTools.ConnectGoogleDrive](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectgoogledrive)
-    * [DataTools.ConnectGoogleCloudStorage](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectgooglecloudstorage)
-    * [DataTools.ConnectSFTP](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectsftp)
-    * [DataTools.FileCMD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsfilecmd)
-    * [DataTools.DownloadFolderFromGD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsdownloadfolderfromgd)
-    * [DataTools.UploadFolderToGD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsuploadfoldertogd)
+- [1. Installation](https://github.com/jian-frank-cao/spike#1-installation)
+- [2. Module: TwitterMonitor](https://github.com/jian-frank-cao/spike#2-module-twittermonitor)
+    * [TwitterMonitor.ConnectTwitterAPI](https://github.com/jian-frank-cao/spike#twittermonitorconnecttwitterapi)
+    * [TwitterMonitor.SyncFolderToCloudStorage](https://github.com/jian-frank-cao/spike#twittermonitorsyncfoldertocloudstorage)
+- [3. Module: DataTools](https://github.com/jian-frank-cao/spike#3-module-datatools)
+    * [DataTools.ConnectGoogleDrive](https://github.com/jian-frank-cao/spike#datatoolsconnectgoogledrive)
+    * [DataTools.ConnectGoogleCloudStorage](https://github.com/jian-frank-cao/spike#datatoolsconnectgooglecloudstorage)
+    * [DataTools.ConnectSFTP](https://github.com/jian-frank-cao/spike#datatoolsconnectsftp)
+    * [DataTools.FileCMD](https://github.com/jian-frank-cao/spike#datatoolsfilecmd)
+    * [DataTools.DownloadFolderFromGD](https://github.com/jian-frank-cao/spike#datatoolsdownloadfolderfromgd)
+    * [DataTools.UploadFolderToGD](https://github.com/jian-frank-cao/spike#datatoolsuploadfoldertogd)
 
 ## 1. Installation
 ```ruby
@@ -24,8 +24,8 @@ pip3 install git+https://github.com/jian-frank-cao/spike.git@main
 ```
 
 ## 2. Module: TwitterMonitor
-- [ConnectTwitterAPI](https://github.com/jian-frank-cao/spike/blob/main/README.md#twittermonitorconnecttwitterapi)
-- [SyncFolderToCloudStorage](https://github.com/jian-frank-cao/spike/blob/main/README.md#twittermonitorsyncfoldertocloudstorage)
+- [ConnectTwitterAPI](https://github.com/jian-frank-cao/spike#twittermonitorconnecttwitterapi)
+- [SyncFolderToCloudStorage](https://github.com/jian-frank-cao/spike#twittermonitorsyncfoldertocloudstorage)
 
 ### TwitterMonitor.ConnectTwitterAPI
 ![flow chart](./twitter_monitor.png)
@@ -108,12 +108,12 @@ SyncFolderToCloudStorage(source_path, zip_path, token_path, storage_bucket,
 ```
 
 ## 3. Module: DataTools
-- [ConnectGoogleDrive](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectgoogledrive)
-- [ConnectGoogleCloudStorage](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectgooglecloudstorage)
-- [ConnectSFTP](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsconnectsftp)
-- [FileCMD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsfilecmd)
-- [DownloadFolderFromGD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsdownloadfolderfromgd)
-- [UploadFolderToGD](https://github.com/jian-frank-cao/spike/blob/main/README.md#datatoolsuploadfoldertogd)
+- [ConnectGoogleDrive](https://github.com/jian-frank-cao/spike#datatoolsconnectgoogledrive)
+- [ConnectGoogleCloudStorage](https://github.com/jian-frank-cao/spike#datatoolsconnectgooglecloudstorage)
+- [ConnectSFTP](https://github.com/jian-frank-cao/spike#datatoolsconnectsftp)
+- [FileCMD](https://github.com/jian-frank-cao/spike#datatoolsfilecmd)
+- [DownloadFolderFromGD](https://github.com/jian-frank-cao/spike#datatoolsdownloadfolderfromgd)
+- [UploadFolderToGD](https://github.com/jian-frank-cao/spike#datatoolsuploadfoldertogd)
 
 ### DataTools.ConnectGoogleDrive
 ```ruby
