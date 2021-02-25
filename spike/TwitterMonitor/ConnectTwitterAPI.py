@@ -242,7 +242,8 @@ class ConnectTwitterAPI:
             if not file_is_ready:
                 continue
             # save file
-            self.file_timer = datetime.now() + self.minutes_per_file
+            if self.outlet_type == 'local':
+                self.file_timer = datetime.now() + self.minutes_per_file
             tweet_time = self.tweets[-1]['created_at']
             time_format = '%a %b %d %H:%M:%S %z %Y'
             if 'v2' in self.api_type:
