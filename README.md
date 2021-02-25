@@ -66,7 +66,7 @@ twitter_api.StartMonitor(input_dict = {'keywords' : ['covid19', 'covid-19'],
 ```
 #### Example run: rest API, save file locally every 15000 tweets
 ```ruby
-twitter_api.StartMonitor(input_dict = {'keywords': '(covid19) OR (covid-19)'],
+twitter_api.StartMonitor(input_dict = {'keywords': '(covid19) OR (covid-19)',
                                     'max_id':   1358090529750331392,
                                     'since_id': 1357738009202950148,
                                     'download_path': 'PATH/TO/FOLDER/',
