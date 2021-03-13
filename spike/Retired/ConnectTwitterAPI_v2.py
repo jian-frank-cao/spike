@@ -18,6 +18,11 @@ from datetime import datetime, timedelta
 from requests import HTTPError, ConnectionError
 from TwitterAPI import TwitterAPI, TwitterConnectionError, TwitterRequestError
 
+RESOURCES = {'search_tweets_v1': {'resource': 'search/tweets',
+                                  'parallel': False},
+             'time_line_v1':     {'resource': 'search/tweets',
+                                  'parallel': False}}
+
 ## Define class ---------------------------------------------------------------
 class ConnectTwitterAPI:
     """Object that connects Twitter API (Stream, REST, Lab-COVID19)
@@ -25,11 +30,8 @@ class ConnectTwitterAPI:
         StartMonitor(input_dict, api_type, outlet_type)
     """
     
-    def __init__(self, consumer_key, consumer_secret,
-                 access_token_key, access_token_secret):
-        if (not consumer_key or not consumer_secret or not
-                 access_token_key or not access_token_secret):
-            raise ValueError('COMSUMER KEY&SECRET, ACCESS KEY&SECRET are needed.')
+    def __init__(self, consumer_key = None, consumer_secret = None,
+                 access_token_key = None, access_token_secret = None):
         
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
@@ -64,17 +66,25 @@ class ConnectTwitterAPI:
 
         # authorization
         if self.api_type == 'stream_v1':
+            if (not self.consumer_key or not self.consumer_secret or not
+                self.access_token_key or not self.access_token_secret):
+                raise ValueError('COMSUMER KEY&SECRET, ' + 
+                                 'ACCESS KEY&SECRET are needed.')
             self.twitter_api = TwitterAPI(self.consumer_key,
                                          self.consumer_secret,
                                          self.access_token_key,
                                          self.access_token_secret)
             print('oAuth1 is ready.')
         if any(x == self.api_type for x in ['rest_v1', 'lab_covid19']):
+            if (not self.consumer_key or not self.consumer_secret):
+                raise ValueError('COMSUMER KEY&SECRET are needed.')
             self.twitter_api = TwitterAPI(self.consumer_key,
                                          self.consumer_secret,
                                          auth_type='oAuth2')
             print('oAuth2 is ready.')
         if any(x == self.api_type for x in ['stream_v2', 'rest_v2']): # modify this to use TwitterAPI
+            if (not self.consumer_key or not self.consumer_secret):
+                raise ValueError('COMSUMER KEY&SECRET are needed.')
             self.bearer_token = self.GetBearerToken(self.consumer_key,
                                                     self.consumer_secret)
         
