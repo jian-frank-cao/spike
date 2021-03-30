@@ -1,1 +1,1 @@
-from .ConnectTwitterAPI_v1 import ConnectTwitterAPI
+from .ConnectTwitterAPI_lab import ConnectTwitterAPI
