@@ -109,7 +109,7 @@ def SyncFolderToCloudStorage(source_path,
         
         # delete old files
         for file_name in file_delete_list:
-            file_cmd.DeleteFile(zip_path, file_name)
+            file_cmd.DeleteFile(zip_path, file_name, verbose = False)
         
         # finish
         if retry:

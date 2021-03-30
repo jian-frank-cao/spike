@@ -91,7 +91,8 @@ class FileCMD:
         print(file_name + ' is moved to ' + to_path)
 
 
-    def DeleteFile(self, folder_path, file_name):
+    def DeleteFile(self, folder_path, file_name,
+                    verbose = True):
         """Delete a file from local disk
         Parameters:     
            folder_path (str): path of the target folder.
@@ -107,7 +108,8 @@ class FileCMD:
             print(folder_path + file_name + " doesn't exist.")
             return(None)
         os.remove(folder_path + file_name)
-        print(folder_path + file_name + ' is deleted')
+        if verbose:
+            print(folder_path + file_name + ' is deleted')
 
 
     def ZipFile(self, source_path, output_path,
