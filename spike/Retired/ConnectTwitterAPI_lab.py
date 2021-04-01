@@ -19,7 +19,7 @@ from requests import HTTPError, ConnectionError
 from JianTwitterAPI import JianTwitterAPI, TwitterConnectionError, TwitterRequestError
 
 ## Define class ---------------------------------------------------------------
-class ConnectTwitterAPI:
+class ConnectTwitterAPI_lab:
     """Object that connects Twitter API (Stream, REST, Lab-COVID19)
     Functions:
         StartMonitor(input_dict, api_type, outlet_type)
