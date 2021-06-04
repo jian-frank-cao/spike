@@ -28,7 +28,7 @@ class FileCMD:
     """
     
     def __init__(self):
-        return
+        print('FileCMD is ready.')
 
     
     def _check_path(self, path):
