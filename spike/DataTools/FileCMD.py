@@ -28,6 +28,7 @@ class FileCMD:
     """
     
     def __init__(self):
+        return
 
     
     def _check_path(self, path):
