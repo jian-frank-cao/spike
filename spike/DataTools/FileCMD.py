@@ -27,6 +27,9 @@ class FileCMD:
               password = None, zip_type = '7z')
     """
     
+    def __init__(self):
+
+    
     def _check_path(self, path):
         if not os.path.exists(path):
             print('"' + path + '" is not an valid path.')
