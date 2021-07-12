@@ -44,6 +44,16 @@ class ConnectSFTP:
             path = '/' + path
         return(path)
 
+    def _check_wd(self, path):
+        try:
+            resp = self.ftp.sendcmd('MLST ' + path)
+            if 'Type=dir' in resp:
+                return True
+            else:
+                return False
+        except error_perm as e:
+            return False
+
 
     def CreateFolder(self, sftp_path):
         """Create a folder
@@ -55,8 +65,10 @@ class ConnectSFTP:
         if not sftp_path:
             print('SFTP_PATH is needed.')
             return(None)
-        self.ftp.mkd(sftp_path)
-        print(sftp_path + ' is created.')
+        sftp_path = self._check_path(sftp_path, True)
+        if self._check_wd(sftp_path) == False:
+            self.ftp.mkd(sftp_path)
+            print(sftp_path + ' is created.')
 
 
     def ListFiles(self, sftp_path):
